@@ -23,10 +23,12 @@ struct RecipeView: View {
                     case .header:
                         RecipeHeader(recipe: recipe, parsed: parsed)
                     case .step(let idx, let step):
-                        StepView(idx: idx, step: step)
+                        StepView(idx: idx, step: step, generating: recipe.generating ?? false)
                     }
                 }
                 .font(.appBody)
+
+                Spacer().frame(height: 150)
             }
             .lineSpacing(Styling.appBodyLineSpacing)
             .lineLimit(nil)
@@ -145,6 +147,7 @@ struct IngredientsUnit: View {
 struct StepView: View {
     var idx: Int // zero indexed
     var step: Step
+    var generating: Bool
 
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
@@ -162,6 +165,7 @@ struct StepView: View {
                 Text(step.text)
                     .multilineTextAlignment(.leading)
                     .lineLimit(nil)
+                    .opacity(generating ? 0.5 : 1)
             }
         }
         .font(.appBody)

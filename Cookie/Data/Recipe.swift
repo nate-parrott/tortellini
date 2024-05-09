@@ -9,6 +9,7 @@ struct Recipe: Equatable, Codable, Identifiable {
     var image: URL?
     var parsed: ParsedRecipe?
     var movedToFront: Date?
+    var generating: Bool?
 
     var sortDate: Date {
         movedToFront ?? added

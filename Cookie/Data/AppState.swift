@@ -8,6 +8,12 @@ struct AppState: Equatable, Codable {
 
 class AppStore: DataStore<AppState> {
     static let shared = AppStore(persistenceKey: "CookieAppStore", defaultModel: .stub, queue: .main)
+
+    override func processModelAfterLoad(model: inout AppState) {
+        for id in model.recipes.keys {
+            model.recipes[id]?.generating = nil
+        }
+    }
 }
 
 extension AppState {

@@ -20,14 +20,16 @@ extension AppStore {
 
         // Assemble context we'll send to the LLM
         var context = [String]()
-        if let jsonLD = htmlProcessor.doc.jsonLD, let (steps, ingredients) = extractRecipeFromJSONLD(root: jsonLD) {
-            let asStr = """
-            INGREDIENTS:
-            \(ingredients.joined(separator: "- "))
-            STEPS:
-            \(steps.joined(separator: "- "))
-            """
-            context.append(asStr)
+        for jsonLD in htmlProcessor.doc.jsonLDElements {
+            if let (steps, ingredients) = extractRecipeFromJSONLD(root: jsonLD) {
+                let asStr = """
+                INGREDIENTS:
+                \(ingredients.joined(separator: "- "))
+                STEPS:
+                \(steps.joined(separator: "- "))
+                """
+                context.append(asStr)
+            }
         }
         context.append(htmlProcessor.markdown(urlMode: .omit, moveJsonLDToFront: false))
         let contextText = context.joined(separator: "\n\n").truncate(toTokens: 5000)
@@ -44,24 +46,46 @@ extension AppStore {
             text: contextText,
             image: htmlProcessor.ogImage,
             parsed: nil,
-            movedToFront: nil
+            movedToFront: nil,
+            generating: true
         )
-        recipe.parsed = try await recipe.parseIntoBasicSteps()
-        print("[Add] Parsed:\n\(recipe.parsed!)")
-        let steps = try await recipe.parsed!.formatSteps()
-        recipe.parsed?.steps = steps
-        await AppStore.shared.modifyAsync { state in
-            state.recipes[recipe.id] = recipe
+
+        // Display partial recipe
+
+        func updateAndYieldRecipe(_ block: (inout Recipe) -> Void) async {
+            block(&recipe)
+            await AppStore.shared.modifyAsync { $0.recipes[recipe.id] = recipe }
         }
+
+        await updateAndYieldRecipe { _ in () }
+
+        for try await partial in try await recipe.parseIntoBasicSteps() {
+            await updateAndYieldRecipe { $0.parsed = partial }
+        }
+
+        print("[Add] Parsed:\n\(recipe.parsed!)")
+
+        for try await parsedAndFormatted in try await recipe.parsed!.formatSteps() {
+            await updateAndYieldRecipe { $0.parsed = parsedAndFormatted }
+        }
+
+        await updateAndYieldRecipe { $0.generating = nil }
+//        let steps = try await recipe.parsed!.formatSteps()
+//        recipe.parsed?.steps = steps
+//        await AppStore.shared.modifyAsync { state in
+//            state.recipes[recipe.id] = recipe
+//        }
     }
 }
 
 extension HTMLDocument {
-    var jsonLD: Any? {
-        if let text = css("script[type='application/ld+json']").first?.stringValue.nilIfEmpty {
-            return try? JSONSerialization.jsonObject(with: text.data(using: .utf8)!)
+    var jsonLDElements: [Any] {
+        css("script[type='application/ld+json']").compactMap { el in
+            if let text = el.stringValue.nilIfEmpty {
+                return try? JSONSerialization.jsonObject(with: text.data(using: .utf8)!)
+            }
+            return nil
         }
-        return nil
     }
 }
 

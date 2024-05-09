@@ -3,7 +3,7 @@ import Foundation
 import ChatToys
 
 extension Recipe {
-    func parseIntoBasicSteps() async throws -> ParsedRecipe {
+    func parseIntoBasicSteps() async throws -> AsyncThrowingStream<ParsedRecipe, Error> {
         enum Errors: Error {
             case noRecipePresent
         }
@@ -55,30 +55,30 @@ extension Recipe {
         struct Output: Codable {
             var recipePresent: Bool
             var title: String?
-            var ingredients: [Ingredient]
-            var steps: [Step]
+            var ingredients: [Ingredient]?
+            var steps: [Step]?
             var summary: String?
         }
 
 //        let output = try await ClaudeNewAPI(credentials: .getSharedCredsOrThrow(), options: .init(model: .claude3Haiku, maxTokens: 4000, responsePrefix: responsePrefix))
-        let output = try await ChatGPT(credentials: .getSharedOpenRouterCredsOrThrow(), options: .init(model: .custom("meta-llama/llama-3-70b-instruct:nitro", 8192), maxTokens: 8000, baseURL: .openRouterOpenAIChatEndpoint))
-            .completeJSONObject(prompt: messages, type: Output.self)
-
-        guard output.recipePresent else {
-            throw Errors.noRecipePresent
+        let llm = try ChatGPT(credentials: .getSharedOpenRouterCredsOrThrow(), options: .init(model: .custom("meta-llama/llama-3-70b-instruct:nitro", 8192), maxTokens: 8000, baseURL: .openRouterOpenAIChatEndpoint))
+        return llm.completeStreamingWithJSONObject(prompt: messages, type: Output.self, completeLinesOnly: true).mapSimple { output in
+            ParsedRecipe(
+                title: output.title ?? title,
+                description: output.summary,
+                steps: output.steps ?? [],
+                ingredients: output.ingredients ?? []
+            )
         }
-
-        return ParsedRecipe(
-            title: output.title ?? title,
-            description: output.summary,
-            steps: output.steps,
-            ingredients: output.ingredients
-        )
     }
 }
 
 extension ParsedRecipe {
-    func formatSteps() async throws -> [Step] {
+    func formatSteps() async throws -> AsyncThrowingStream<ParsedRecipe, Error> {
+        enum Errors: Error {
+            case invalidXML
+        }
+
         let system = """
         I'm making an app that formats recipes to make them easier to read and follow.
 
@@ -86,17 +86,27 @@ extension ParsedRecipe {
 
         I'd like to turn mentions of time ("cook for 10 minutes") into clickable buttons.
 
-        I'll give you a recipe. Your job is to rewrite each step's text using a special XML syntax. When you see certain types of phrases, like references to an ingredient, or references to a cooking time, replace your text with a special XML annotation. These annotations will be formatted nicely to be more readable.
+        I'll give you a recipe. Your job is to rewrite each step's text using a special XML syntax. When you see certain types of phrases, like references to an ingredient, or references to a cooking time, replace your text with a special XML annotation. These annotations will be formatted nicely to be more readable, and contain valuable information.
 
         Here are the very important rules for rewriting each step:
-        - Wrap each step in <step> tags. Keep the number of steps the same as in the input.
-        - Wrap mentions of ingredient in <ingredient> tags. If the INGREDIENTS LIST mentions an amount or preparation (e.g. finely chopped), but it's not mentioned in the step, add a `missing-details` attribute to fill it in. It should be possible to read the new recipe without referring back to the ingredients list for amounts and other details. If the recipe say something like "the remaining scallions" or "half the butter," do the math and put the appropriate amount in `missing-details.
-        - Wrap each mention of a cook timer in a <timer> tag, so the user can tap to set a timer. If the recipe calls for repeating an action multiple times (e.g. "cook 7 minutes each side") set `repeat` appropriately, otherwise keep it at  1.
-        - Besides these rules, keep the text and meaning of each step the same.
-        - When wrapping things in <ingredient> or <timer>, do not change the inner text. Wrap in tags, don't rewrite.
 
-        Ingredients tags look like this: <ingredient emoji="🧈" missing-details="10 oz">butter or ghee</ingredient>. Choose a related FOOD or DRINK emoji.
-        Timer tags look like this: <timer hours={0} minutes={6} repeat={1} name>cook 6 minutes each side until crispy</timer>. // use repeat={2} when the recipe says to cook something N minutes per side.
+        Rule: Wrap each step in <step> tags. Keep the number of steps the same as in the input.
+
+        Rule: Wrap mentions of ingredients in <ingredient> tags.
+        Use the missing-details attribute to add AMOUNT and PREPARATION information drawn from the ingredients list, if not present in the step itself. For example, if the step says "Add the cilantro", and the ingredients list calls for "1 cup cilanto, finely chopped", the you'd write "1 cup, finely chopped" in the missing-info field.
+
+        Rule: Wrap each mention of a cook timer in a <timer> tag, so the user can tap to set a timer.
+        If the recipe calls for repeating an action multiple times (e.g. "cook 7 minutes each side") set `repeat` appropriately, otherwise keep it at  1.
+
+        Rule: Besides these rules, keep the text and meaning of each step the same.
+
+        Rule: When wrapping things in <ingredient> or <timer>, do not change the inner text. Wrap in tags, don't rewrite.
+
+        Ingredients tags look like this: <ingredient emoji="🧈" missing-details="10 oz">butter or ghee</ingredient>. Choose a related FOOD or DRINK emoji. Always fill out missing-details if the step is missing amount or prep information that's present in the ingredients list.
+
+        Timer tags look like this: <timer hours={0} minutes={6} repeat={1} name>cook 6 minutes each side until crispy</timer>.
+        Use repeat={2} when the recipe says to cook something N minutes per side.
+        
         Steps tags look like this: <step index={N}> // one-indexed
 
         Here are some examples:
@@ -144,15 +154,46 @@ extension ParsedRecipe {
         ]
 //        let llm = try ClaudeNewAPI(credentials: .getSharedCredsOrThrow(), options: .init(model: .claude3Haiku, maxTokens: 4000, responsePrefix: responsePrefix))
         let llm = try ChatGPT(credentials: .getSharedOpenRouterCredsOrThrow(), options: .init(model: .custom("meta-llama/llama-3-70b-instruct:nitro", 8192), maxTokens: 8000, baseURL: .openRouterOpenAIChatEndpoint))
+//        let response = try await llm.complete(prompt: messages).content.byExtractingOnlyCodeBlocks.withoutPrefix("xml")
 
-        let response = try await llm.complete(prompt: messages).content.byExtractingOnlyCodeBlocks.withoutPrefix("xml")
-        print("[Add] XML:\n\(response)")
+        return AsyncThrowingStream<ParsedRecipe, Error> { cont in
+            Task {
+                do {
+                    var lastXML: String?
+                    var lines = [String]()
+                    for try await line in llm.completeStreamingLineByLine(prompt: messages) {
+                        lines.append(line)
+                        let xml = lines.joined(separator: "\n").byExtractingOnlyCodeBlocks.withoutPrefix("xml")
+                        if let parsed = try? self.applyingFormattedStepsXML(xml: xml) {
+                            cont.yield(parsed)
+                        }
+                        lastXML = xml
+                    }
+                    guard let lastXML else {
+                        throw Errors.invalidXML
+                    }
+                    print("XML:\n\(lastXML)")
+                    let parsed = try applyingFormattedStepsXML(xml: lastXML)
+                    cont.yield(parsed)
+                    cont.finish()
+                } catch {
+                    cont.finish(throwing: error)
+                }
+            }
+        }
+    }
+}
+
+extension ParsedRecipe {
+    func applyingFormattedStepsXML(xml: String) throws -> ParsedRecipe {
+//        print("[Add] XML:\n\(xml)")
         // Use HTML parsing b/c it's more lenient
-        let parsed = try HTMLDocument(string: response, encoding: .utf8)
+        let parsed = try HTMLDocument(string: xml, encoding: .utf8)
 
-        var finalSteps = [Step]()
-        for (unparsedStep, stepNode) in zip(steps, parsed.css("step")) {
-            var step = unparsedStep
+        var steps = self.steps
+        for (i, stepNode) in parsed.css("step").enumerated() {
+            guard i < steps.count else { continue }
+            var step = steps[i]
             step.formattedText = []
             for node in stepNode.childNodes(ofTypes: [.Text, .Element]) {
                 switch node.type {
@@ -165,9 +206,12 @@ extension ParsedRecipe {
                 default: ()
                 }
             }
-            finalSteps.append(step)
+            steps[i] = step
         }
-        return finalSteps
+
+        var output = self
+        output.steps = steps
+        return output
     }
 }
 
