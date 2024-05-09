@@ -95,7 +95,7 @@ extension ParsedRecipe {
         - Besides these rules, keep the text and meaning of each step the same.
         - When wrapping things in <ingredient> or <timer>, do not change the inner text. Wrap in tags, don't rewrite.
 
-        Ingredients tags look like this: <ingredient emoji="🧈" missing-details="10 oz">butter or ghee</ingredient>.
+        Ingredients tags look like this: <ingredient emoji="🧈" missing-details="10 oz">butter or ghee</ingredient>. Choose a related FOOD or DRINK emoji.
         Timer tags look like this: <timer hours={0} minutes={6} repeat={1} name>cook 6 minutes each side until crispy</timer>. // use repeat={2} when the recipe says to cook something N minutes per side.
         Steps tags look like this: <step index={N}> // one-indexed
 
