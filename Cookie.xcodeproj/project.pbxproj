@@ -46,6 +46,7 @@
 		5FC77C062BED283B001CC443 /* LLM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC77C052BED283B001CC443 /* LLM.swift */; };
 		5FC77C082BED28ED001CC443 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC77C072BED28ED001CC443 /* SettingsView.swift */; };
 		5FC77C0B2BED3170001CC443 /* Fuzi in Frameworks */ = {isa = PBXBuildFile; productRef = 5FC77C0A2BED3170001CC443 /* Fuzi */; };
+		5FC77C0D2BED4BB4001CC443 /* String+CleanedUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC77C0C2BED4BB4001CC443 /* String+CleanedUp.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -113,6 +114,7 @@
 		5FC77C032BEC8523001CC443 /* WebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
 		5FC77C052BED283B001CC443 /* LLM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LLM.swift; sourceTree = "<group>"; };
 		5FC77C072BED28ED001CC443 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		5FC77C0C2BED4BB4001CC443 /* String+CleanedUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+CleanedUp.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -170,6 +172,7 @@
 				5FC77BF72BEC378D001CC443 /* SpeechRecognizer.swift */,
 				5FC77BF92BEC3BCF001CC443 /* VoiceAssistant .swift */,
 				5FC77C052BED283B001CC443 /* LLM.swift */,
+				5FC77C0C2BED4BB4001CC443 /* String+CleanedUp.swift */,
 				5FC77C002BEC8516001CC443 /* WebContent */,
 				5FC77BC02BEBFCE2001CC443 /* Utils */,
 				5FC77BB52BEBD938001CC443 /* Data */,
@@ -385,6 +388,7 @@
 				5FC77C022BEC851E001CC443 /* WebContent.swift in Sources */,
 				5FC77BB92BEBDCFA001CC443 /* Recipe.swift in Sources */,
 				5FC77BD82BEC1D79001CC443 /* Task.swift in Sources */,
+				5FC77C0D2BED4BB4001CC443 /* String+CleanedUp.swift in Sources */,
 				5FC77BBD2BEBEBC9001CC443 /* Stubs.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

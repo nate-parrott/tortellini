@@ -74,4 +74,12 @@ extension String {
         }
         return lines.joined(separator: "\n")
     }
+
+    func withoutPrefix(_ prefix: String) -> String {
+        if hasPrefix(prefix) {
+            return String(dropFirst(prefix.count))
+        }
+        return self
+    }
 }
+

@@ -55,28 +55,57 @@ struct RecipeView: View {
     }
 }
 
+struct RecipeHeroImage: View {
+    var url: URL?
+
+    var body: some View {
+        StretchyHero {
+            FillerGradient()
+                .overlay {
+                    AsyncImage(
+                        url: url,
+                        content: { $0.resizable().interpolation(.high).aspectRatio(contentMode: .fill).background(.white) }, 
+                        placeholder: { EmptyView() }
+                    )
+                }
+//                Image("SampleHeader")
+//                    .resizable()
+//                    .aspectRatio(contentMode: .fill)
+        }
+    }
+}
+
+private struct FillerGradient: View {
+    var body: some View {
+        LinearGradient(colors: [Color.white, Color.black], startPoint: .top, endPoint: .bottom)
+            .opacity(0.5)
+            .blendMode(.overlay)
+            .background(.purple)
+    }
+}
+
 struct RecipeHeader: View {
     var recipe: Recipe
     var parsed: ParsedRecipe
 
     var body: some View {
-        VStack(alignment: .leading) {
-            StretchyHero {
-                Image("SampleHeader")
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-            }
+        VStack {
+            RecipeHeroImage(url: recipe.image)
 
-            VStack(alignment: .leading, spacing: 16) {
-                Text(parsed.title)
-                    .font(.system(.largeTitle, design: .rounded, weight: .heavy))
-                    .lineSpacing(6)
-                    .padding(.top, 18)
+            VStack(spacing: 16) {
+                Group {
+                    Text(parsed.title)
+                        .font(.system(size: 34, weight: .bold, design: .rounded))
+                        .lineSpacing(6)
+                        .padding(.top, 18)
 
-//                if let description = parsed.description {
-//                    Text(description)
-//                        .foregroundStyle(.secondary)
-//                }
+                    if let description = parsed.description {
+                        Text(description.cleanedUp)
+                            .lineSpacing(4)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+                .padding(.horizontal, 6)
 
                 if parsed.ingredients.count > 0 {
                     IngredientsUnit(ingredients: parsed.ingredients)
@@ -85,6 +114,7 @@ struct RecipeHeader: View {
             }
             .padding(.horizontal, Styling.padding)
         }
+        .multilineTextAlignment(.center)
     }
 }
 
@@ -95,7 +125,7 @@ struct IngredientsUnit: View {
         VStack(alignment: .leading, spacing: 16) {
             ForEachUnidentifiable(items: ingredients) { ing in
                 Label(
-                    title: { Text(ing.text) },
+                    title: { Text(ing.text.cleanedUp) },
                     icon: { EmojiView(emoji: ing.emoji) }
                 )
             }
@@ -154,19 +184,19 @@ struct FormattedTextView: View {
     @ViewBuilder private func partView(_ part: Step.FormattedText) -> some View {
         switch part {
         case .plain(let string):
-            ForEachUnidentifiable(items: string.splittingButKeepingSpaces) { word in
+            ForEachUnidentifiable(items: string.cleanedUp.splittingButKeepingSpaces) { word in
                 Text(word)
             }
         case .bold(let string):
-            ForEachUnidentifiable(items: string.splittingButKeepingSpaces) { word in
+            ForEachUnidentifiable(items: string.cleanedUp.splittingButKeepingSpaces) { word in
                 Text(word).bold()
             }
         case .ingredient(let ingredient):
-            ForEach(ingredient.text.splittingButKeepingSpaces.identifiableByIndices) { tuple in
+            ForEach(ingredient.text.cleanedUp.splittingButKeepingSpaces.identifiableByIndices) { tuple in
                 Text(tuple.item)
                     .foregroundStyle(.purple)
             }
-            if let missingInfo = ingredient.missingInfo?.nilIfEmpty {
+            if let missingInfo = ingredient.missingInfo?.nilIfEmpty?.cleanedUp {
                 let text = " (" + missingInfo + ")"
                 ForEach(text.splittingButKeepingSpaces.identifiableByIndices) {
                     Text($0.item)

@@ -2,15 +2,25 @@ import SwiftUI
 
 enum DefaultsKeys: String {
     case anthropicApiKey
+    case openAIApiKey
+    case openRouterAPIKey
 }
 
 struct SettingsView: View {
-    @AppStorage(DefaultsKeys.anthropicApiKey.rawValue) var apiKey: String = ""
-    
+    @AppStorage(DefaultsKeys.anthropicApiKey.rawValue) var anthropicKey: String = ""
+    @AppStorage(DefaultsKeys.openAIApiKey.rawValue) var openAIKey: String = ""
+    @AppStorage(DefaultsKeys.openRouterAPIKey.rawValue) var openRouterKey: String = ""
+
     var body: some View {
         Form {
             Section(header: Text("Anthropic API Key")) {
-                TextField("API Key", text: $apiKey)
+                TextField("API Key", text: $anthropicKey)
+            }
+            Section(header: Text("OpenAI API Key")) {
+                TextField("API Key", text: $openAIKey)
+            }
+            Section(header: Text("OpenRouter API Key")) {
+                TextField("API Key", text: $openRouterKey)
             }
         }
         .navigationTitle("Settings")

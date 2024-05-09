@@ -10,7 +10,7 @@ extension Recipe {
         image: nil,
         parsed: ParsedRecipe(
             title: "Delicious and Simple Weeknight Pasta",
-            description: "This pasta dish puts all others to shame, with its simple weeknight joie de vivre.",
+            description: "Simple pasta with butter and scallions.",
             steps: [
                 .init(title: "Cook the pasta",
                       text: "Salt and boil 2 cups water on high heat, then add pasta and boil for 10 minutes",

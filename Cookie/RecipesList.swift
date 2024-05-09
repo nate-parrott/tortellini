@@ -9,10 +9,10 @@ struct RecipesList: View {
         List(orderedRecipes, selection: $selectedRecipeId) { recipe in
             RecipeCell(recipe: recipe)
                 .swipeActions {
-                    Button(action: { AppStore.shared.model.recipes.removeValue(forKey: recipe.id) }, label: {
+                    Button(role: .destructive, action: { AppStore.shared.model.recipes.removeValue(forKey: recipe.id) }) {
                         Image(systemName: "trash.fill")
-                            .accessibilityLabel("Remove Recipe")
-                    })
+                            .accessibilityLabel("Delete Recipe")
+                    }
                 }
         }
         .onReceive(AppStore.shared.publisher.map(\.recipes)) { self.recipes = $0 }
@@ -43,9 +43,9 @@ struct RecipeCell: View {
     var recipe: Recipe
 
     var body: some View {
-        HStack {
+        HStack(spacing: 16) {
             image
-                .frame(width: 80, height: 60)
+                .frame(width: 80, height: 80)
 
             VStack(alignment: .leading) {
                 Text(recipe.parsed?.title ?? recipe.title)
@@ -81,11 +81,12 @@ struct RecipeCell: View {
             .overlay {
                 AsyncImage(
                     url: recipe.image,
-                    content: { $0.resizable().aspectRatio(contentMode: .fill) },
+                    content: { $0.resizable().interpolation(.high).aspectRatio(contentMode: .fill) },
                     placeholder: { Image(systemName: "fork.knife").font(.system(size: 30)).foregroundStyle(.tertiary) }
                 )
             }
             .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+            .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 1)
     }
 }
 

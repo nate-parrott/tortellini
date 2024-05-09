@@ -17,7 +17,7 @@ extension Recipe {
         """
         let body = """
         <recipe title='\(title)'>
-        \(text.truncate(toTokens: 5000))
+        \(text.truncate(toTokens: 4000))
         </recipe>
 
         OK, that was the recipe webpage. Now, translate it
@@ -26,14 +26,14 @@ extension Recipe {
         interface Recipe {
             recipePresent: Bool // Does a recipe exist in the webpage? true or false
             title: string // Remove SEO cruft from original title if present
-            description: string // 1-2 sentence description of the dish. If you find this on the page, great; otherwise write one.
             ingredients: Ingredient[]
             steps: Step[]
+            summary: string // Quick 10-word summary of the cooking process, like "Cook pasta, roast chicken and serve with sauce."
         }
 
         interface Ingredient {
             text: string // e.g. "1.5 tsp cumin" or "1 cup chopped brocolli or bok choy"
-            emoji: string // closest related emoji
+            emoji: string // choose the closest FOOD or DRINK emoji
         }
 
         interface Step {
@@ -42,7 +42,7 @@ extension Recipe {
         }
         ```
 
-        Your `Recipe` object below:
+        Your `Recipe` object below, and no other commentary, in a ```code block```:
         """
 
         let responsePrefix = "```\n{\n\t\"recipePresent\":"
@@ -55,12 +55,13 @@ extension Recipe {
         struct Output: Codable {
             var recipePresent: Bool
             var title: String?
-            var description: String?
             var ingredients: [Ingredient]
             var steps: [Step]
+            var summary: String?
         }
 
-        let output = try await ClaudeNewAPI(credentials: .getSharedCredsOrThrow(), options: .init(model: .claude3Haiku, responsePrefix: responsePrefix))
+//        let output = try await ClaudeNewAPI(credentials: .getSharedCredsOrThrow(), options: .init(model: .claude3Haiku, maxTokens: 4000, responsePrefix: responsePrefix))
+        let output = try await ChatGPT(credentials: .getSharedOpenRouterCredsOrThrow(), options: .init(model: .custom("meta-llama/llama-3-70b-instruct:nitro", 8192), maxTokens: 8000, baseURL: .openRouterOpenAIChatEndpoint))
             .completeJSONObject(prompt: messages, type: Output.self)
 
         guard output.recipePresent else {
@@ -69,7 +70,7 @@ extension Recipe {
 
         return ParsedRecipe(
             title: output.title ?? title,
-            description: output.description,
+            description: output.summary,
             steps: output.steps,
             ingredients: output.ingredients
         )
@@ -88,13 +89,14 @@ extension ParsedRecipe {
         I'll give you a recipe. Your job is to rewrite each step's text using a special XML syntax. When you see certain types of phrases, like references to an ingredient, or references to a cooking time, replace your text with a special XML annotation. These annotations will be formatted nicely to be more readable.
 
         Here are the very important rules for rewriting each step:
-        - Wrap each step in <step> tags. Keep the number of steps the same.
-        - Wrap each mention of an ingredient in <ingredient> tags. If the INGREDIENTS LIST mentions an amount or preparation (e.g. finely chopped), but it's not mentioned in the step, add a `missing-details` attribute to fill it in. It should be possible to read the new recipe without referring back to the ingredients list for amounts and other details. If the recipe say something like "the remaining scallions" or "half the butter," do the math.
-        - Wrap each mention of a cook timer in a <timer> tag, so the user can tap to set a timer.
+        - Wrap each step in <step> tags. Keep the number of steps the same as in the input.
+        - Wrap mentions of ingredient in <ingredient> tags. If the INGREDIENTS LIST mentions an amount or preparation (e.g. finely chopped), but it's not mentioned in the step, add a `missing-details` attribute to fill it in. It should be possible to read the new recipe without referring back to the ingredients list for amounts and other details. If the recipe say something like "the remaining scallions" or "half the butter," do the math and put the appropriate amount in `missing-details.
+        - Wrap each mention of a cook timer in a <timer> tag, so the user can tap to set a timer. If the recipe calls for repeating an action multiple times (e.g. "cook 7 minutes each side") set `repeat` appropriately, otherwise keep it at  1.
         - Besides these rules, keep the text and meaning of each step the same.
+        - When wrapping things in <ingredient> or <timer>, do not change the inner text. Wrap in tags, don't rewrite.
 
         Ingredients tags look like this: <ingredient emoji="🧈" missing-details="10 oz">butter or ghee</ingredient>.
-        Timer tags look like this: <timer hours={0} minutes={6} repeat={2} name>cook 6 minutes each side until crispy</timer>.
+        Timer tags look like this: <timer hours={0} minutes={6} repeat={1} name>cook 6 minutes each side until crispy</timer>. // use repeat={2} when the recipe says to cook something N minutes per side.
         Steps tags look like this: <step index={N}> // one-indexed
 
         Here are some examples:
@@ -132,7 +134,7 @@ extension ParsedRecipe {
 
         [END RECIPE]
 
-        Now, rewrite this recipe's steps using the precise rules and XML schema described above, with no commentary:
+        Now, rewrite this recipe's steps as a series of <step> tags within a ```code block```, using valid XML following the rules exactly:
         """
 
         let responsePrefix = "```\n<step index=\"1\">"
@@ -140,8 +142,10 @@ extension ParsedRecipe {
             LLMMessage(role: .system, content: system),
             LLMMessage(role: .user, content: user)
         ]
-        let llm = try ClaudeNewAPI(credentials: .getSharedCredsOrThrow(), options: .init(model: .claude3Haiku, responsePrefix: responsePrefix))
-        let response = try await llm.complete(prompt: messages).content.byExtractingOnlyCodeBlocks
+//        let llm = try ClaudeNewAPI(credentials: .getSharedCredsOrThrow(), options: .init(model: .claude3Haiku, maxTokens: 4000, responsePrefix: responsePrefix))
+        let llm = try ChatGPT(credentials: .getSharedOpenRouterCredsOrThrow(), options: .init(model: .custom("meta-llama/llama-3-70b-instruct:nitro", 8192), maxTokens: 8000, baseURL: .openRouterOpenAIChatEndpoint))
+
+        let response = try await llm.complete(prompt: messages).content.byExtractingOnlyCodeBlocks.withoutPrefix("xml")
         print("[Add] XML:\n\(response)")
         // Use HTML parsing b/c it's more lenient
         let parsed = try HTMLDocument(string: response, encoding: .utf8)

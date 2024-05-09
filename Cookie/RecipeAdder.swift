@@ -18,7 +18,7 @@ struct RecipeAdder: View {
                     .padding()
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else {
-                VStack {
+                VStack(spacing: 20) {
                     ProgressView()
 
                     Text("Adding recipe...")

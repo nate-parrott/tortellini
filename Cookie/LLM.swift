@@ -19,3 +19,22 @@ extension AnthropicCredentials {
         return shared
     }
 }
+
+extension OpenAICredentials {
+    static var sharedOpenRouter: OpenAICredentials? {
+        if let key = UserDefaults.standard.string(forKey: DefaultsKeys.openRouterAPIKey.rawValue)?.nilIfEmpty {
+            return .init(apiKey: key)
+        }
+        return nil
+    }
+
+    static func getSharedOpenRouterCredsOrThrow() throws -> OpenAICredentials {
+        enum Errors: Error {
+            case noOpenRouterAPIKey
+        }
+        guard let sharedOpenRouter else {
+            throw Errors.noOpenRouterAPIKey
+        }
+        return sharedOpenRouter
+    }
+}
