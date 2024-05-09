@@ -27,14 +27,15 @@ struct RecipeView: View {
                     }
                 }
                 .font(.appBody)
-
-                Spacer().frame(height: 150)
             }
             .lineSpacing(Styling.appBodyLineSpacing)
             .lineLimit(nil)
             .multilineTextAlignment(.leading)
 
             Footer()
+        }
+        .onAppear {
+            AppStore.shared.modify { $0.lastActiveRecipe = recipe.id }
         }
     }
 
@@ -330,6 +331,7 @@ struct FocusedScrollView<Item: Identifiable, V: View>: View {
                     view(item)
                 }
             }
+            Spacer().frame(height: 150)
         }
         .ignoresSafeArea([.container], edges: .top)
     }

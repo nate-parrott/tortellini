@@ -8,6 +8,7 @@ struct Footer: View {
 
     @State private var snapshot = Snapshot()
     @State private var width: CGFloat?
+    @State private var showingVoiceDebug = false
 
     var body: some View {
         ScrollView(.horizontal) {
@@ -34,6 +35,14 @@ struct Footer: View {
         .onReceive(AppStore.shared.publisher.map { Snapshot(timers: $0.timers /*+ [.stub, .stub2] */, voiceAssistantActive: $0.voiceAssistantActive) }, perform: { snapshot in
             self.snapshot = snapshot
         })
+        .onChange(of: snapshot.voiceAssistantActive) { newValue in
+            if newValue {
+                showingVoiceDebug = true
+            }
+        }
+        .sheet(isPresented: $showingVoiceDebug) {
+            VoiceAssistantDebug()
+        }
     }
 
     private var footerItemsCount: Int {

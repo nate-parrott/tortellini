@@ -135,13 +135,7 @@ extension ParsedRecipe {
         let user = """
         Below, here's the real recipe:
         [BEGIN RECIPE]
-        Ingredients:
-        \(ingredients.map{ "- " + $0.text }.joined(separator: "\n"))
-        Steps:
-        \(steps.enumerated().map({ (i, step) in
-        return "\(i + 1). \(step.text)"
-        }).joined(separator: "\n"))
-
+        \(forLLM)
         [END RECIPE]
 
         Now, rewrite this recipe's steps as a series of <step> tags within a ```code block```, using valid XML following the rules exactly:
@@ -212,6 +206,18 @@ extension ParsedRecipe {
         var output = self
         output.steps = steps
         return output
+    }
+
+    var forLLM: String {
+        return """
+        Title: \(title)
+        Ingredients:
+        \(ingredients.map{ "- " + $0.text }.joined(separator: "\n"))
+        Steps:
+        \(steps.enumerated().map({ (i, step) in
+        return "\(i + 1). \(step.text)"
+        }).joined(separator: "\n"))
+        """
     }
 }
 
