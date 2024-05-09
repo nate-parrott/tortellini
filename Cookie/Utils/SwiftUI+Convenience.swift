@@ -118,3 +118,29 @@ extension UIColor {
         .init(uiColor: self)
     }
 }
+
+extension View {
+    func onAppearOrChange<T: Equatable>(_ value: T, perform: @escaping (T) -> Void) -> some View {
+        self.onAppear(perform: { perform(value) }).onChange(of: value, perform: perform)
+    }
+
+    func onFirstAppear(_ perform: @escaping () -> Void) -> some View {
+        self.modifier(OnFirstAppearModifier(perform: perform))
+    }
+}
+
+private struct OnFirstAppearModifier: ViewModifier {
+    var perform: () -> Void
+    @State private var appearedYet = false
+
+    func body(content: Content) -> some View {
+        content
+            .onAppear {
+                if !appearedYet {
+                    appearedYet = true
+                    perform()
+                }
+            }
+    }
+}
+

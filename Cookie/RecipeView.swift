@@ -16,20 +16,24 @@ struct RecipeView: View {
     var parsed: ParsedRecipe
 
     var body: some View {
-        FocusedScrollView(items: cells) { cell in
-            Group {
-                switch cell {
-                case .header:
-                    RecipeHeader(recipe: recipe, parsed: parsed)
-                case .step(let idx, let step):
-                    StepView(idx: idx, step: step)
+        VStack(spacing: 0) {
+            FocusedScrollView(items: cells) { cell in
+                Group {
+                    switch cell {
+                    case .header:
+                        RecipeHeader(recipe: recipe, parsed: parsed)
+                    case .step(let idx, let step):
+                        StepView(idx: idx, step: step)
+                    }
                 }
+                .font(.appBody)
             }
-            .font(.appBody)
+            .lineSpacing(Styling.appBodyLineSpacing)
+            .lineLimit(nil)
+            .multilineTextAlignment(.leading)
+
+            Footer()
         }
-        .lineSpacing(Styling.appBodyLineSpacing)
-        .lineLimit(nil)
-        .multilineTextAlignment(.leading)
     }
 
     enum Cell: Identifiable {

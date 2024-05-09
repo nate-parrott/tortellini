@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -29,7 +29,48 @@
 		5FC77BD42BEC1C9A001CC443 /* UIViewController+Topmost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC77BD32BEC1C9A001CC443 /* UIViewController+Topmost.swift */; };
 		5FC77BD62BEC1D06001CC443 /* AppState+Add.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC77BD52BEC1D06001CC443 /* AppState+Add.swift */; };
 		5FC77BD82BEC1D79001CC443 /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC77BD72BEC1D79001CC443 /* Task.swift */; };
+		5FC77BE02BEC2214001CC443 /* UniformTypeIdentifiers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5FC77BDF2BEC2214001CC443 /* UniformTypeIdentifiers.framework */; };
+		5FC77BE32BEC2214001CC443 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5FC77BE22BEC2214001CC443 /* Media.xcassets */; };
+		5FC77BE52BEC2214001CC443 /* ActionRequestHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC77BE42BEC2214001CC443 /* ActionRequestHandler.swift */; };
+		5FC77BE72BEC2214001CC443 /* Action.js in Resources */ = {isa = PBXBuildFile; fileRef = 5FC77BE62BEC2214001CC443 /* Action.js */; };
+		5FC77BEB2BEC2214001CC443 /* SaveRecipe.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 5FC77BDD2BEC2214001CC443 /* SaveRecipe.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		5FC77BF22BEC2681001CC443 /* UIApplication+DismissModals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC77BF12BEC2681001CC443 /* UIApplication+DismissModals.swift */; };
+		5FC77BF42BEC26C2001CC443 /* RecipeAdder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC77BF32BEC26C2001CC443 /* RecipeAdder.swift */; };
+		5FC77BF62BEC29F4001CC443 /* Footer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC77BF52BEC29F4001CC443 /* Footer.swift */; };
+		5FC77BF82BEC378D001CC443 /* SpeechRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC77BF72BEC378D001CC443 /* SpeechRecognizer.swift */; };
+		5FC77BFA2BEC3BCF001CC443 /* VoiceAssistant .swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC77BF92BEC3BCF001CC443 /* VoiceAssistant .swift */; };
+		5FC77BFD2BEC82C8001CC443 /* ChatToys in Frameworks */ = {isa = PBXBuildFile; productRef = 5FC77BFC2BEC82C8001CC443 /* ChatToys */; };
+		5FC77BFF2BEC84FF001CC443 /* Browser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC77BFE2BEC84FF001CC443 /* Browser.swift */; };
+		5FC77C022BEC851E001CC443 /* WebContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC77C012BEC851E001CC443 /* WebContent.swift */; };
+		5FC77C042BEC8523001CC443 /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC77C032BEC8523001CC443 /* WebView.swift */; };
+		5FC77C062BED283B001CC443 /* LLM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC77C052BED283B001CC443 /* LLM.swift */; };
+		5FC77C082BED28ED001CC443 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC77C072BED28ED001CC443 /* SettingsView.swift */; };
+		5FC77C0B2BED3170001CC443 /* Fuzi in Frameworks */ = {isa = PBXBuildFile; productRef = 5FC77C0A2BED3170001CC443 /* Fuzi */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		5FC77BE92BEC2214001CC443 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5FC77B982BEBD84A001CC443 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 5FC77BDC2BEC2214001CC443;
+			remoteInfo = SaveRecipe;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		5FC77BEF2BEC2214001CC443 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				5FC77BEB2BEC2214001CC443 /* SaveRecipe.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		5FC77BA02BEBD84A001CC443 /* Cookie.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Cookie.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -55,6 +96,23 @@
 		5FC77BD32BEC1C9A001CC443 /* UIViewController+Topmost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Topmost.swift"; sourceTree = "<group>"; };
 		5FC77BD52BEC1D06001CC443 /* AppState+Add.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppState+Add.swift"; sourceTree = "<group>"; };
 		5FC77BD72BEC1D79001CC443 /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
+		5FC77BDD2BEC2214001CC443 /* SaveRecipe.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SaveRecipe.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		5FC77BDF2BEC2214001CC443 /* UniformTypeIdentifiers.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UniformTypeIdentifiers.framework; path = System/Library/Frameworks/UniformTypeIdentifiers.framework; sourceTree = SDKROOT; };
+		5FC77BE22BEC2214001CC443 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
+		5FC77BE42BEC2214001CC443 /* ActionRequestHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionRequestHandler.swift; sourceTree = "<group>"; };
+		5FC77BE62BEC2214001CC443 /* Action.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = Action.js; sourceTree = "<group>"; };
+		5FC77BE82BEC2214001CC443 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5FC77BF02BEC254F001CC443 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		5FC77BF12BEC2681001CC443 /* UIApplication+DismissModals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+DismissModals.swift"; sourceTree = "<group>"; };
+		5FC77BF32BEC26C2001CC443 /* RecipeAdder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeAdder.swift; sourceTree = "<group>"; };
+		5FC77BF52BEC29F4001CC443 /* Footer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Footer.swift; sourceTree = "<group>"; };
+		5FC77BF72BEC378D001CC443 /* SpeechRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechRecognizer.swift; sourceTree = "<group>"; };
+		5FC77BF92BEC3BCF001CC443 /* VoiceAssistant .swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VoiceAssistant .swift"; sourceTree = "<group>"; };
+		5FC77BFE2BEC84FF001CC443 /* Browser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Browser.swift; sourceTree = "<group>"; };
+		5FC77C012BEC851E001CC443 /* WebContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebContent.swift; sourceTree = "<group>"; };
+		5FC77C032BEC8523001CC443 /* WebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
+		5FC77C052BED283B001CC443 /* LLM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LLM.swift; sourceTree = "<group>"; };
+		5FC77C072BED28ED001CC443 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +120,16 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5FC77C0B2BED3170001CC443 /* Fuzi in Frameworks */,
+				5FC77BFD2BEC82C8001CC443 /* ChatToys in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5FC77BDA2BEC2214001CC443 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5FC77BE02BEC2214001CC443 /* UniformTypeIdentifiers.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -72,6 +140,8 @@
 			isa = PBXGroup;
 			children = (
 				5FC77BA22BEBD84A001CC443 /* Cookie */,
+				5FC77BE12BEC2214001CC443 /* SaveRecipe */,
+				5FC77BDE2BEC2214001CC443 /* Frameworks */,
 				5FC77BA12BEBD84A001CC443 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -80,6 +150,7 @@
 			isa = PBXGroup;
 			children = (
 				5FC77BA02BEBD84A001CC443 /* Cookie.app */,
+				5FC77BDD2BEC2214001CC443 /* SaveRecipe.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -87,10 +158,19 @@
 		5FC77BA22BEBD84A001CC443 /* Cookie */ = {
 			isa = PBXGroup;
 			children = (
+				5FC77BF02BEC254F001CC443 /* Info.plist */,
 				5FC77BA32BEBD84A001CC443 /* CookieApp.swift */,
+				5FC77C072BED28ED001CC443 /* SettingsView.swift */,
 				5FC77BCD2BEC194F001CC443 /* RecipesList.swift */,
 				5FC77BBE2BEBEDBB001CC443 /* RecipeView.swift */,
+				5FC77BFE2BEC84FF001CC443 /* Browser.swift */,
 				5FC77BC32BEBFE28001CC443 /* Toolbox.swift */,
+				5FC77BF32BEC26C2001CC443 /* RecipeAdder.swift */,
+				5FC77BF52BEC29F4001CC443 /* Footer.swift */,
+				5FC77BF72BEC378D001CC443 /* SpeechRecognizer.swift */,
+				5FC77BF92BEC3BCF001CC443 /* VoiceAssistant .swift */,
+				5FC77C052BED283B001CC443 /* LLM.swift */,
+				5FC77C002BEC8516001CC443 /* WebContent */,
 				5FC77BC02BEBFCE2001CC443 /* Utils */,
 				5FC77BB52BEBD938001CC443 /* Data */,
 				5FC77BA72BEBD84B001CC443 /* Assets.xcassets */,
@@ -133,8 +213,37 @@
 				5FC77BC92BEC091A001CC443 /* WrappingHStack.swift */,
 				5FC77BD12BEC1C86001CC443 /* PromptDialog.swift */,
 				5FC77BD32BEC1C9A001CC443 /* UIViewController+Topmost.swift */,
+				5FC77BF12BEC2681001CC443 /* UIApplication+DismissModals.swift */,
 			);
 			path = Utils;
+			sourceTree = "<group>";
+		};
+		5FC77BDE2BEC2214001CC443 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				5FC77BDF2BEC2214001CC443 /* UniformTypeIdentifiers.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		5FC77BE12BEC2214001CC443 /* SaveRecipe */ = {
+			isa = PBXGroup;
+			children = (
+				5FC77BE22BEC2214001CC443 /* Media.xcassets */,
+				5FC77BE42BEC2214001CC443 /* ActionRequestHandler.swift */,
+				5FC77BE62BEC2214001CC443 /* Action.js */,
+				5FC77BE82BEC2214001CC443 /* Info.plist */,
+			);
+			path = SaveRecipe;
+			sourceTree = "<group>";
+		};
+		5FC77C002BEC8516001CC443 /* WebContent */ = {
+			isa = PBXGroup;
+			children = (
+				5FC77C012BEC851E001CC443 /* WebContent.swift */,
+				5FC77C032BEC8523001CC443 /* WebView.swift */,
+			);
+			path = WebContent;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -147,15 +256,38 @@
 				5FC77B9C2BEBD84A001CC443 /* Sources */,
 				5FC77B9D2BEBD84A001CC443 /* Frameworks */,
 				5FC77B9E2BEBD84A001CC443 /* Resources */,
+				5FC77BEF2BEC2214001CC443 /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				5FC77BEA2BEC2214001CC443 /* PBXTargetDependency */,
+			);
+			name = Cookie;
+			packageProductDependencies = (
+				5FC77BFC2BEC82C8001CC443 /* ChatToys */,
+				5FC77C0A2BED3170001CC443 /* Fuzi */,
+			);
+			productName = Cookie;
+			productReference = 5FC77BA02BEBD84A001CC443 /* Cookie.app */;
+			productType = "com.apple.product-type.application";
+		};
+		5FC77BDC2BEC2214001CC443 /* SaveRecipe */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5FC77BEC2BEC2214001CC443 /* Build configuration list for PBXNativeTarget "SaveRecipe" */;
+			buildPhases = (
+				5FC77BD92BEC2214001CC443 /* Sources */,
+				5FC77BDA2BEC2214001CC443 /* Frameworks */,
+				5FC77BDB2BEC2214001CC443 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = Cookie;
-			productName = Cookie;
-			productReference = 5FC77BA02BEBD84A001CC443 /* Cookie.app */;
-			productType = "com.apple.product-type.application";
+			name = SaveRecipe;
+			productName = SaveRecipe;
+			productReference = 5FC77BDD2BEC2214001CC443 /* SaveRecipe.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -170,6 +302,9 @@
 					5FC77B9F2BEBD84A001CC443 = {
 						CreatedOnToolsVersion = 15.3;
 					};
+					5FC77BDC2BEC2214001CC443 = {
+						CreatedOnToolsVersion = 15.3;
+					};
 				};
 			};
 			buildConfigurationList = 5FC77B9B2BEBD84A001CC443 /* Build configuration list for PBXProject "Cookie" */;
@@ -181,11 +316,16 @@
 				Base,
 			);
 			mainGroup = 5FC77B972BEBD84A001CC443;
+			packageReferences = (
+				5FC77BFB2BEC82C8001CC443 /* XCLocalSwiftPackageReference "../chattoys" */,
+				5FC77C092BED3170001CC443 /* XCRemoteSwiftPackageReference "Fuzi" */,
+			);
 			productRefGroup = 5FC77BA12BEBD84A001CC443 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				5FC77B9F2BEBD84A001CC443 /* Cookie */,
+				5FC77BDC2BEC2214001CC443 /* SaveRecipe */,
 			);
 		};
 /* End PBXProject section */
@@ -200,6 +340,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		5FC77BDB2BEC2214001CC443 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5FC77BE72BEC2214001CC443 /* Action.js in Resources */,
+				5FC77BE32BEC2214001CC443 /* Media.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -208,6 +357,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				5FC77BBF2BEBEDBB001CC443 /* RecipeView.swift in Sources */,
+				5FC77BFA2BEC3BCF001CC443 /* VoiceAssistant .swift in Sources */,
+				5FC77C062BED283B001CC443 /* LLM.swift in Sources */,
 				5FC77BC82BEC01D0001CC443 /* StringUtils.swift in Sources */,
 				5FC77BBB2BEBE075001CC443 /* Parsing.swift in Sources */,
 				5FC77BCE2BEC194F001CC443 /* RecipesList.swift in Sources */,
@@ -217,20 +368,44 @@
 				5FC77BCC2BEC1800001CC443 /* AppState.swift in Sources */,
 				5FC77BA42BEBD84A001CC443 /* CookieApp.swift in Sources */,
 				5FC77BD42BEC1C9A001CC443 /* UIViewController+Topmost.swift in Sources */,
+				5FC77BF22BEC2681001CC443 /* UIApplication+DismissModals.swift in Sources */,
 				5FC77BD62BEC1D06001CC443 /* AppState+Add.swift in Sources */,
+				5FC77C042BEC8523001CC443 /* WebView.swift in Sources */,
+				5FC77C082BED28ED001CC443 /* SettingsView.swift in Sources */,
 				5FC77BCA2BEC091A001CC443 /* WrappingHStack.swift in Sources */,
 				5FC77BC22BEBFCE9001CC443 /* SwiftUI+Convenience.swift in Sources */,
 				5FC77BB42BEBD933001CC443 /* Queue.swift in Sources */,
 				5FC77BD02BEC1B16001CC443 /* URLHelpers.swift in Sources */,
+				5FC77BF42BEC26C2001CC443 /* RecipeAdder.swift in Sources */,
+				5FC77BF82BEC378D001CC443 /* SpeechRecognizer.swift in Sources */,
 				5FC77BB72BEBDAB7001CC443 /* DataStore+SwiftUI.swift in Sources */,
+				5FC77BFF2BEC84FF001CC443 /* Browser.swift in Sources */,
+				5FC77BF62BEC29F4001CC443 /* Footer.swift in Sources */,
 				5FC77BC62BEBFE73001CC443 /* View+Measure.swift in Sources */,
+				5FC77C022BEC851E001CC443 /* WebContent.swift in Sources */,
 				5FC77BB92BEBDCFA001CC443 /* Recipe.swift in Sources */,
 				5FC77BD82BEC1D79001CC443 /* Task.swift in Sources */,
 				5FC77BBD2BEBEBC9001CC443 /* Stubs.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		5FC77BD92BEC2214001CC443 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5FC77BE52BEC2214001CC443 /* ActionRequestHandler.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		5FC77BEA2BEC2214001CC443 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 5FC77BDC2BEC2214001CC443 /* SaveRecipe */;
+			targetProxy = 5FC77BE92BEC2214001CC443 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		5FC77BAC2BEBD84B001CC443 /* Debug */ = {
@@ -355,6 +530,7 @@
 		5FC77BAF2BEBD84B001CC443 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
@@ -363,6 +539,9 @@
 				DEVELOPMENT_TEAM = VPN8ZW6EAC;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Cookie/Info.plist;
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "You can ask the voice assistant questions.";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "You can ask the voice assistant questions.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -384,6 +563,7 @@
 		5FC77BB02BEBD84B001CC443 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
@@ -392,6 +572,9 @@
 				DEVELOPMENT_TEAM = VPN8ZW6EAC;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Cookie/Info.plist;
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "You can ask the voice assistant questions.";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "You can ask the voice assistant questions.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -404,6 +587,56 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nateparrott.Cookie;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		5FC77BED2BEC2214001CC443 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = VPN8ZW6EAC;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SaveRecipe/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = SaveRecipe;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nateparrott.Cookie.SaveRecipe;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		5FC77BEE2BEC2214001CC443 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = VPN8ZW6EAC;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SaveRecipe/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = SaveRecipe;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nateparrott.Cookie.SaveRecipe;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -431,7 +664,46 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		5FC77BEC2BEC2214001CC443 /* Build configuration list for PBXNativeTarget "SaveRecipe" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5FC77BED2BEC2214001CC443 /* Debug */,
+				5FC77BEE2BEC2214001CC443 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		5FC77BFB2BEC82C8001CC443 /* XCLocalSwiftPackageReference "../chattoys" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../chattoys;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		5FC77C092BED3170001CC443 /* XCRemoteSwiftPackageReference "Fuzi" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/cezheng/Fuzi";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.1.3;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		5FC77BFC2BEC82C8001CC443 /* ChatToys */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ChatToys;
+		};
+		5FC77C0A2BED3170001CC443 /* Fuzi */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5FC77C092BED3170001CC443 /* XCRemoteSwiftPackageReference "Fuzi" */;
+			productName = Fuzi;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 5FC77B982BEBD84A001CC443 /* Project object */;
 }

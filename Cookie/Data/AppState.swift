@@ -19,7 +19,7 @@ extension AppState {
     }
 }
 
-struct InProgressTimer: Equatable, Codable {
+struct InProgressTimer: Equatable, Codable, Identifiable {
     var id: String
     var recipeId: String
     var original: CookTimer

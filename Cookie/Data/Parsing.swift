@@ -1,7 +1,13 @@
+import Fuzi
 import Foundation
+import ChatToys
 
 extension Recipe {
-    func parseIntoBasicSteps() async throws -> (summary: String?, steps: [Step]) {
+    func parseIntoBasicSteps() async throws -> ParsedRecipe {
+        enum Errors: Error {
+            case noRecipePresent
+        }
+
         let system = """
         Your job is to extract a recipe from a webpage and translate it into a specific JSON format.
         
@@ -11,11 +17,11 @@ extension Recipe {
         """
         let body = """
         <recipe title='\(title)'>
-        \(text)
+        \(text.truncate(toTokens: 5000))
         </recipe>
 
         OK, that was the recipe webpage. Now, translate it
-        into valid JSON, according to this exact Typescript schema:
+        into a valid JSON `Recipe` object, according to this exact Typescript schema:
         ```
         interface Recipe {
             recipePresent: Bool // Does a recipe exist in the webpage? true or false
@@ -35,16 +41,38 @@ extension Recipe {
             title: string // a descriptive 2-4 word title, like "Braise the Beef" or "Cook the Couscous". Avoid titles like "Step 1" -- write a more descriptive title instead. Each step's title should be unique; no repeats.
         }
         ```
+
+        Your `Recipe` object below:
         """
+
+        let responsePrefix = "```\n{\n\t\"recipePresent\":"
+
+        let messages: [LLMMessage] = [
+            LLMMessage(role: .system, content: system),
+            LLMMessage(role: .user, content: body)
+        ]
 
         struct Output: Codable {
             var recipePresent: Bool
             var title: String?
             var description: String?
-            var ingredients: [Ingredient]?
-            var steps: [Step]?
+            var ingredients: [Ingredient]
+            var steps: [Step]
         }
-        fatalError()
+
+        let output = try await ClaudeNewAPI(credentials: .getSharedCredsOrThrow(), options: .init(model: .claude3Haiku, responsePrefix: responsePrefix))
+            .completeJSONObject(prompt: messages, type: Output.self)
+
+        guard output.recipePresent else {
+            throw Errors.noRecipePresent
+        }
+
+        return ParsedRecipe(
+            title: output.title ?? title,
+            description: output.description,
+            steps: output.steps,
+            ingredients: output.ingredients
+        )
     }
 }
 
@@ -79,6 +107,7 @@ extension ParsedRecipe {
         3. Garnish with remaining scallions and serve.
 
         Your output:
+        ```
         <step index={1}>
         <ingredient emoji="🧂">Salt</ingredient> and boil <ingredient emoji="💧">2 cups water</ingredient> on high heat, then add <ingredient emoji="🍝" missing-details="10oz">pasta</ingredient> and <timer hours={0} minutes={10} repeat={1}>boil for 10 minutes</timer>.
         </step>
@@ -88,6 +117,7 @@ extension ParsedRecipe {
         <step index={3}>
         Garnish with the <ingredient emoji="🌱" missing-details="1, finely chopped">remaining scallions</ingredient> and serve.
         </step>
+        ```
         """
 
         let user = """
@@ -102,10 +132,101 @@ extension ParsedRecipe {
 
         [END RECIPE]
 
-        Now, rewrite this recipe's steps using the precise rules and XML schema described above:
+        Now, rewrite this recipe's steps using the precise rules and XML schema described above, with no commentary:
         """
 
-        let responsePrefix = "<step index=\"1\">"
-        fatalError()
+        let responsePrefix = "```\n<step index=\"1\">"
+        let messages: [LLMMessage] = [
+            LLMMessage(role: .system, content: system),
+            LLMMessage(role: .user, content: user)
+        ]
+        let llm = try ClaudeNewAPI(credentials: .getSharedCredsOrThrow(), options: .init(model: .claude3Haiku, responsePrefix: responsePrefix))
+        let response = try await llm.complete(prompt: messages).content.byExtractingOnlyCodeBlocks
+        print("[Add] XML:\n\(response)")
+        // Use HTML parsing b/c it's more lenient
+        let parsed = try HTMLDocument(string: response, encoding: .utf8)
+
+        var finalSteps = [Step]()
+        for (unparsedStep, stepNode) in zip(steps, parsed.css("step")) {
+            var step = unparsedStep
+            step.formattedText = []
+            for node in stepNode.childNodes(ofTypes: [.Text, .Element]) {
+                switch node.type {
+                case .Text:
+                    step.formattedText!.append(.plain(node.stringValue.trimmingCharacters(in: .newlines)))
+                case .Element:
+                    if let el = node as? XMLElement, let item = Step.FormattedText.itemFromElement(el) {
+                        step.formattedText!.append(item)
+                    }
+                default: ()
+                }
+            }
+            finalSteps.append(step)
+        }
+        return finalSteps
     }
 }
+
+private extension Step.FormattedText {
+    static func itemFromElement(_ element: XMLElement) -> Step.FormattedText? {
+        guard let tag = element.tag else { return nil }
+        switch tag.lowercased() {
+        case "ingredient":
+            guard let emoji = element.attr("emoji") else {
+                return nil
+            }
+            let text = element.stringValue.trimmingCharacters(in: .newlines)
+            let missingInfo = element.attr("missing-details")
+            return .ingredient(Ingredient(emoji: emoji, text: text, missingInfo: missingInfo))
+
+        case "timer":
+            let hours = element.attr("hours")?.parsedAsInt ?? 0
+            let minutes = element.attr("minutes")?.parsedAsInt ?? 0
+            let seconds = hours * 3600 + minutes * 60
+            let repeats = element.attr("repeat")?.parsedAsInt
+            return .timer(CookTimer(
+                asText: element.stringValue.trimmingCharacters(in: .newlines),
+                seconds: seconds, 
+                repeats: repeats)
+            )
+
+        default:
+            return .plain(element.stringValue)
+
+        }
+    }
+}
+
+extension String {
+    var parsedAsInt: Int? {
+        Int(self)
+    }
+}
+
+/*
+ struct Ingredient: Equatable, Codable {
+     var emoji: String
+     var text: String
+     var missingInfo: String?
+ }
+
+ struct Step: Equatable, Codable {
+     var title: String
+     var text: String // Initially, write like this
+     var formattedText: [FormattedText]?
+
+     enum FormattedText: Equatable, Codable {
+         case plain(String)
+         case bold(String)
+         case ingredient(Ingredient)
+         case timer(CookTimer)
+     }
+ }
+
+ struct CookTimer: Equatable, Codable {
+     var asText: String
+     var seconds: Int
+     var repeats: Int?
+ }
+
+ */

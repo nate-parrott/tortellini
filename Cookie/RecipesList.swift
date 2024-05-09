@@ -3,8 +3,6 @@ import SwiftUI
 struct RecipesList: View {
     @State private var selectedRecipeId: String?
     @State private var recipes = [String: Recipe]()
-    @State private var addInProgress = false
-    @State private var error: String?
 
     var body: some View {
         let orderedRecipes = recipes.values.sorted(by: { $0.sortDate > $1.sortDate })
@@ -19,23 +17,6 @@ struct RecipesList: View {
         }
         .onReceive(AppStore.shared.publisher.map(\.recipes)) { self.recipes = $0 }
         .navigationTitle("Recipes")
-        .toolbar {
-            ToolbarItem(placement: .primaryAction) {
-                Button(action: addViaURL) {
-                    if addInProgress {
-                        ProgressView()
-                    } else {
-                        Image(systemName: "plus.circle.fill")
-                            .accessibilityLabel("Add Recipe")
-                    }
-                }
-            }
-        }
-        .alert("Oops, I couldn't add that recipe.", isPresented: errBinding) {
-            Button(action: { errBinding.wrappedValue = false }, label: {
-                Text("Okat")
-            })
-        }
         .sheet(item: showingRecipeBinding) { recipe in
             if let parsed = recipe.parsed {
                 RecipeView(recipe: recipe, parsed: parsed)
@@ -54,31 +35,6 @@ struct RecipesList: View {
             return nil
         }) { recipeOpt in
             selectedRecipeId = recipeOpt?.id
-        }
-    }
-
-    private var errBinding: Binding<Bool> {
-        .init(get: { error != nil }, set: { newVal in if !newVal { error = nil } })
-    }
-
-    private func addViaURL() {
-        Task {
-            self.addInProgress = true
-            defer {
-                self.addInProgress = false
-            }
-            self.error = nil
-            guard let text = await UIApplication.shared.prompt(title: "Add Recipe", message: "Paste a link:", placeholder: "https://meatballs.com/gravy"),
-                  let url = URL(string: text)
-            else {
-                return
-            }
-            do {
-                try await AppStore.shared.addRecipe(fromURL: url)
-            } catch {
-                print("Failed to add recipe: \(error)")
-                self.error = "\(error)"
-            }
         }
     }
 }
