@@ -38,7 +38,7 @@
 		5FC77BF42BEC26C2001CC443 /* RecipeAdder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC77BF32BEC26C2001CC443 /* RecipeAdder.swift */; };
 		5FC77BF62BEC29F4001CC443 /* Footer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC77BF52BEC29F4001CC443 /* Footer.swift */; };
 		5FC77BF82BEC378D001CC443 /* SpeechRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC77BF72BEC378D001CC443 /* SpeechRecognizer.swift */; };
-		5FC77BFA2BEC3BCF001CC443 /* VoiceAssistant .swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC77BF92BEC3BCF001CC443 /* VoiceAssistant .swift */; };
+		5FC77BFA2BEC3BCF001CC443 /* VoiceAssistant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC77BF92BEC3BCF001CC443 /* VoiceAssistant.swift */; };
 		5FC77BFD2BEC82C8001CC443 /* ChatToys in Frameworks */ = {isa = PBXBuildFile; productRef = 5FC77BFC2BEC82C8001CC443 /* ChatToys */; };
 		5FC77BFF2BEC84FF001CC443 /* Browser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC77BFE2BEC84FF001CC443 /* Browser.swift */; };
 		5FC77C022BEC851E001CC443 /* WebContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC77C012BEC851E001CC443 /* WebContent.swift */; };
@@ -47,6 +47,8 @@
 		5FC77C082BED28ED001CC443 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC77C072BED28ED001CC443 /* SettingsView.swift */; };
 		5FC77C0B2BED3170001CC443 /* Fuzi in Frameworks */ = {isa = PBXBuildFile; productRef = 5FC77C0A2BED3170001CC443 /* Fuzi */; };
 		5FC77C0D2BED4BB4001CC443 /* String+CleanedUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC77C0C2BED4BB4001CC443 /* String+CleanedUp.swift */; };
+		5FC77C0F2BED7308001CC443 /* AwaitPublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC77C0E2BED7308001CC443 /* AwaitPublisher.swift */; };
+		5FC77C112BED8461001CC443 /* DateUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC77C102BED8461001CC443 /* DateUtils.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -108,13 +110,15 @@
 		5FC77BF32BEC26C2001CC443 /* RecipeAdder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeAdder.swift; sourceTree = "<group>"; };
 		5FC77BF52BEC29F4001CC443 /* Footer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Footer.swift; sourceTree = "<group>"; };
 		5FC77BF72BEC378D001CC443 /* SpeechRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechRecognizer.swift; sourceTree = "<group>"; };
-		5FC77BF92BEC3BCF001CC443 /* VoiceAssistant .swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VoiceAssistant .swift"; sourceTree = "<group>"; };
+		5FC77BF92BEC3BCF001CC443 /* VoiceAssistant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceAssistant.swift; sourceTree = "<group>"; };
 		5FC77BFE2BEC84FF001CC443 /* Browser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Browser.swift; sourceTree = "<group>"; };
 		5FC77C012BEC851E001CC443 /* WebContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebContent.swift; sourceTree = "<group>"; };
 		5FC77C032BEC8523001CC443 /* WebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
 		5FC77C052BED283B001CC443 /* LLM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LLM.swift; sourceTree = "<group>"; };
 		5FC77C072BED28ED001CC443 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		5FC77C0C2BED4BB4001CC443 /* String+CleanedUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+CleanedUp.swift"; sourceTree = "<group>"; };
+		5FC77C0E2BED7308001CC443 /* AwaitPublisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AwaitPublisher.swift; sourceTree = "<group>"; };
+		5FC77C102BED8461001CC443 /* DateUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateUtils.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -170,7 +174,7 @@
 				5FC77BF32BEC26C2001CC443 /* RecipeAdder.swift */,
 				5FC77BF52BEC29F4001CC443 /* Footer.swift */,
 				5FC77BF72BEC378D001CC443 /* SpeechRecognizer.swift */,
-				5FC77BF92BEC3BCF001CC443 /* VoiceAssistant .swift */,
+				5FC77BF92BEC3BCF001CC443 /* VoiceAssistant.swift */,
 				5FC77C052BED283B001CC443 /* LLM.swift */,
 				5FC77C0C2BED4BB4001CC443 /* String+CleanedUp.swift */,
 				5FC77C002BEC8516001CC443 /* WebContent */,
@@ -211,6 +215,8 @@
 			isa = PBXGroup;
 			children = (
 				5FC77BC12BEBFCE9001CC443 /* SwiftUI+Convenience.swift */,
+				5FC77C0E2BED7308001CC443 /* AwaitPublisher.swift */,
+				5FC77C102BED8461001CC443 /* DateUtils.swift */,
 				5FC77BC52BEBFE73001CC443 /* View+Measure.swift */,
 				5FC77BC72BEC01D0001CC443 /* StringUtils.swift */,
 				5FC77BC92BEC091A001CC443 /* WrappingHStack.swift */,
@@ -360,7 +366,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5FC77BBF2BEBEDBB001CC443 /* RecipeView.swift in Sources */,
-				5FC77BFA2BEC3BCF001CC443 /* VoiceAssistant .swift in Sources */,
+				5FC77BFA2BEC3BCF001CC443 /* VoiceAssistant.swift in Sources */,
 				5FC77C062BED283B001CC443 /* LLM.swift in Sources */,
 				5FC77BC82BEC01D0001CC443 /* StringUtils.swift in Sources */,
 				5FC77BBB2BEBE075001CC443 /* Parsing.swift in Sources */,
@@ -378,8 +384,10 @@
 				5FC77BCA2BEC091A001CC443 /* WrappingHStack.swift in Sources */,
 				5FC77BC22BEBFCE9001CC443 /* SwiftUI+Convenience.swift in Sources */,
 				5FC77BB42BEBD933001CC443 /* Queue.swift in Sources */,
+				5FC77C0F2BED7308001CC443 /* AwaitPublisher.swift in Sources */,
 				5FC77BD02BEC1B16001CC443 /* URLHelpers.swift in Sources */,
 				5FC77BF42BEC26C2001CC443 /* RecipeAdder.swift in Sources */,
+				5FC77C112BED8461001CC443 /* DateUtils.swift in Sources */,
 				5FC77BF82BEC378D001CC443 /* SpeechRecognizer.swift in Sources */,
 				5FC77BB72BEBDAB7001CC443 /* DataStore+SwiftUI.swift in Sources */,
 				5FC77BFF2BEC84FF001CC443 /* Browser.swift in Sources */,

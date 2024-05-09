@@ -15,6 +15,8 @@ struct RecipeView: View {
     var recipe: Recipe
     var parsed: ParsedRecipe
 
+    @State private var voiceAssistant = VoiceAssistant()
+
     var body: some View {
         VStack(spacing: 0) {
             FocusedScrollView(items: cells) { cell in
@@ -36,6 +38,10 @@ struct RecipeView: View {
         }
         .onAppear {
             AppStore.shared.modify { $0.lastActiveRecipe = recipe.id }
+            voiceAssistant.listening = true
+        }
+        .onDisappear {
+            voiceAssistant.listening = false
         }
     }
 

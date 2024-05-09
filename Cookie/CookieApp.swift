@@ -60,6 +60,9 @@ struct RecipesWindow: View {
                 self.adding = .init(url: url)
             }
         }
+        .onAppear {
+            UIApplication.shared.isIdleTimerDisabled = true
+        }
     }
 
     private func addViaURL() {

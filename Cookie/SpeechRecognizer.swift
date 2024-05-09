@@ -2,6 +2,10 @@ import Foundation
 import Speech
 import AVFoundation
 
+#if os(iOS)
+import UIKit
+#endif
+
 // Starts when initialized; runs once
 @MainActor
 class SpeechRecognizer {
@@ -11,20 +15,39 @@ class SpeechRecognizer {
         case errored
         case recognizedText(String)
         case finalizedText(String)
+
+        var text: String? {
+            switch self {
+            case .none, .errored, .starting: return nil
+            case .recognizedText(let string): return string
+            case .finalizedText(let string): return string
+            }
+        }
     }
 
     enum Errors: Error {
         case notAvailable
         case noChannels
+        case inBackground
     }
 
-    @Published var status = Status.none
+    @Published var status = Status.none {
+        didSet {
+            if let text = status.text, text != oldValue.text {
+                lastTextUpdateDate = Date()
+            }
+        }
+    }
+    var lastTextUpdateDate: Date?
+
     private let audioEngine = AVAudioEngine()
     private let recognizer = SFSpeechRecognizer(locale: Locale(identifier: "en-US"))!
     private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
     private var recognitionTask: SFSpeechRecognitionTask?
+    let managesAudioSession: Bool
 
-    init() {
+    init(managesAudioSession: Bool = true) {
+        self.managesAudioSession = managesAudioSession
     }
 
     func start() async {
@@ -40,6 +63,10 @@ class SpeechRecognizer {
                   recognizer.isAvailable else {
                 throw Errors.notAvailable
             }
+
+            if UIApplication.shared.applicationState == .background {
+                throw Errors.inBackground
+            }
 #endif
 
 #if os(macOS)
@@ -49,19 +76,20 @@ class SpeechRecognizer {
             }
 #endif
             let request = SFSpeechAudioBufferRecognitionRequest()
+            request.requiresOnDeviceRecognition = true
             request.shouldReportPartialResults = true
 //            request.taskHint = .dictation
             request.contextualStrings = [
                 "Hey Chef",
+                "Hey Tommy",
+                "Mister Tortellini",
             ]
             //            request.taskHint = .search
             // TODO: Add contextual strings using text from the current page
-            let recognitionRequest = request
+            recognitionRequest = request
 
             let inputNode = self.audioEngine.inputNode
-            let sessionId = UUID().uuidString
-
-            let recognitionTask = recognizer.recognitionTask(with: request, resultHandler: { [weak self] res, err in
+            recognitionTask = recognizer.recognitionTask(with: request, resultHandler: { [weak self] res, err in
                 guard let self else { return }
                 Task {
                     if let res {
@@ -73,9 +101,11 @@ class SpeechRecognizer {
                 }
             })
 #if os(iOS)
-            try AVAudioSession.sharedInstance().setCategory(.record, mode: .default, options: .duckOthers)
-            try AVAudioSession.sharedInstance().setAllowHapticsAndSystemSoundsDuringRecording(true)
-            try AVAudioSession.sharedInstance().setActive(true, options: .notifyOthersOnDeactivation)
+            if managesAudioSession {
+                try AVAudioSession.sharedInstance().setCategory(.record, mode: .default, options: .duckOthers)
+                try AVAudioSession.sharedInstance().setAllowHapticsAndSystemSoundsDuringRecording(true)
+                try AVAudioSession.sharedInstance().setActive(true, options: .notifyOthersOnDeactivation)
+            }
 #endif
 
             let recFmt = inputNode.outputFormat(forBus: 0)
@@ -136,7 +166,9 @@ class SpeechRecognizer {
     // TODO: Can't this be called immediately after _stop_?
     private func stopAudioInput() {
         #if os(iOS)
-        try? AVAudioSession.sharedInstance().setActive(false)
+        if managesAudioSession {
+            try? AVAudioSession.sharedInstance().setActive(false)
+        }
         #endif
         audioEngine.stop()
         audioEngine.inputNode.removeTap(onBus: 0)

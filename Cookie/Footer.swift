@@ -16,6 +16,7 @@ struct Footer: View {
                 Button(action: { AppStore.shared.model.voiceAssistantActive.toggle() }, label: {
                     AssistantMuteView(active: snapshot.voiceAssistantActive, isOnlyItem: footerItemsCount == 1)
                 })
+                .buttonStyle(FooterButtonStyle(footerItemsCount: footerItemsCount, highlightColor: snapshot.voiceAssistantActive ? Color.red : nil))
 
                 ForEach(snapshot.timers) { timer in
                     Button(action: { editTimer(timer) }, label: {
@@ -40,9 +41,9 @@ struct Footer: View {
                 showingVoiceDebug = true
             }
         }
-        .sheet(isPresented: $showingVoiceDebug) {
-            VoiceAssistantDebug()
-        }
+//        .sheet(isPresented: $showingVoiceDebug) {
+//            VoiceAssistantDebug()
+//        }
     }
 
     private var footerItemsCount: Int {
@@ -76,25 +77,19 @@ struct AssistantMuteView: View {
 
     var body: some View {
         HStack {
-            Image(systemName: active ? "mic.circle.fill" : "mic.slash.circle.fill")
-                .font(.system(size: 32))
+            Image(systemName: "mic.fill")
+                .font(.system(size: 26))
                 .foregroundStyle(active ? Color.white : Color.red)
 
 
-            VStack(alignment: .leading) {
-                Text("Voice Assistant")
-                    .font(.system(.caption, weight: .medium))
-                    .opacity(0.8)
-
-                if active {
-                    if isOnlyItem {
-                        Text("Say ") + Text(" “Hey, Chef”")
-                    } else {
-                        Text("Say ") + Text(" “Hey, Chef...”")
-                    }
+            if active {
+                if isOnlyItem {
+                    Text("Say ") + Text(" “Hey, Chef”")
                 } else {
-                    isOnlyItem ? Text("Tap to start listening") : Text("Tap to start")
+                    Text("Say ") + Text(" “Hey, Chef...”")
                 }
+            } else {
+                Text("Voice Assistant")
             }
         }
     }
@@ -102,6 +97,7 @@ struct AssistantMuteView: View {
 
 struct FooterButtonStyle: ButtonStyle {
     var footerItemsCount: Int
+    var highlightColor: Color?
 
     func makeBody(configuration: Configuration) -> some View {
         let scale = configuration.isPressed ? 0.9 : 1
@@ -117,7 +113,7 @@ struct FooterButtonStyle: ButtonStyle {
             .multilineTextAlignment(.leading)
             .background {
                 RoundedRectangle(cornerRadius: 8, style: .continuous)
-                    .fill(Color.white.opacity(0.25))
+                    .fill(highlightColor ?? Color.white.opacity(0.25))
             }
             .scaleEffect(scale)
             .animation(.bouncy, value: scale)
