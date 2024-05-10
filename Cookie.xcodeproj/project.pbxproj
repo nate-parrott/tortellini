@@ -49,6 +49,7 @@
 		5FC77C0D2BED4BB4001CC443 /* String+CleanedUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC77C0C2BED4BB4001CC443 /* String+CleanedUp.swift */; };
 		5FC77C0F2BED7308001CC443 /* AwaitPublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC77C0E2BED7308001CC443 /* AwaitPublisher.swift */; };
 		5FC77C112BED8461001CC443 /* DateUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC77C102BED8461001CC443 /* DateUtils.swift */; };
+		5FC77C132BED87BA001CC443 /* ElevenLabsVoice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC77C122BED87BA001CC443 /* ElevenLabsVoice.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -119,6 +120,7 @@
 		5FC77C0C2BED4BB4001CC443 /* String+CleanedUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+CleanedUp.swift"; sourceTree = "<group>"; };
 		5FC77C0E2BED7308001CC443 /* AwaitPublisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AwaitPublisher.swift; sourceTree = "<group>"; };
 		5FC77C102BED8461001CC443 /* DateUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateUtils.swift; sourceTree = "<group>"; };
+		5FC77C122BED87BA001CC443 /* ElevenLabsVoice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElevenLabsVoice.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -175,6 +177,7 @@
 				5FC77BF52BEC29F4001CC443 /* Footer.swift */,
 				5FC77BF72BEC378D001CC443 /* SpeechRecognizer.swift */,
 				5FC77BF92BEC3BCF001CC443 /* VoiceAssistant.swift */,
+				5FC77C122BED87BA001CC443 /* ElevenLabsVoice.swift */,
 				5FC77C052BED283B001CC443 /* LLM.swift */,
 				5FC77C0C2BED4BB4001CC443 /* String+CleanedUp.swift */,
 				5FC77C002BEC8516001CC443 /* WebContent */,
@@ -378,6 +381,7 @@
 				5FC77BA42BEBD84A001CC443 /* CookieApp.swift in Sources */,
 				5FC77BD42BEC1C9A001CC443 /* UIViewController+Topmost.swift in Sources */,
 				5FC77BF22BEC2681001CC443 /* UIApplication+DismissModals.swift in Sources */,
+				5FC77C132BED87BA001CC443 /* ElevenLabsVoice.swift in Sources */,
 				5FC77BD62BEC1D06001CC443 /* AppState+Add.swift in Sources */,
 				5FC77C042BEC8523001CC443 /* WebView.swift in Sources */,
 				5FC77C082BED28ED001CC443 /* SettingsView.swift in Sources */,

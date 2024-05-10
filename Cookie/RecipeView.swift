@@ -33,12 +33,17 @@ struct RecipeView: View {
             .lineSpacing(Styling.appBodyLineSpacing)
             .lineLimit(nil)
             .multilineTextAlignment(.leading)
+            .overlay(alignment: .bottom) {
+                voiceActivityOverlay
+            }
 
             Footer()
         }
+        .onReceive(AppStore.shared.publisher.map(\.voiceAssistantActive).removeDuplicates(), perform: { active in
+            voiceAssistant.listening = active
+        })
         .onAppear {
             AppStore.shared.modify { $0.lastActiveRecipe = recipe.id }
-            voiceAssistant.listening = true
         }
         .onDisappear {
             voiceAssistant.listening = false
@@ -61,6 +66,47 @@ struct RecipeView: View {
 
     var cells: [Cell] {
         [.header] + parsed.steps.enumerated().map { Cell.step($0.0, $0.1) }
+    }
+
+    @MainActor
+    @ViewBuilder private var voiceActivityOverlay: some View {
+        if voiceAssistant.recognizedSpeech || voiceAssistant.responding {
+            ZStack {
+                if voiceAssistant.recognizedSpeech {
+                    BigIcon(name: "waveform.path", color: .blue)
+                } else if voiceAssistant.responding {
+                    BigIcon(name: "waveform.and.magnifyingglass", color: .green)
+                }
+            }
+            .modifier(ScalePulsingModifier())
+        }
+    }
+}
+
+private struct BigIcon: View {
+    var name: String
+    var color: Color = .blue
+
+    var body: some View {
+        let bg = RoundedRectangle(cornerRadius: 16, style: .continuous)
+        FillerGradient(color: color)
+            .overlay {
+                Image(systemName: name)
+                    .font(.system(size: 50))
+            }
+            .foregroundColor(.white)
+            .frame(both: 90)
+            .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+            .background {
+                bg.fill(color)
+                    .overlay {
+                        bg.fill(Color.black.opacity(0.5))
+                    }
+                    .blur(radius: 15)
+                    .opacity(0.1)
+            }
+            .padding(30)
+            .allowsHitTesting(false)
     }
 }
 
@@ -85,11 +131,13 @@ struct RecipeHeroImage: View {
 }
 
 private struct FillerGradient: View {
+    var color = Color.purple
+
     var body: some View {
         LinearGradient(colors: [Color.white, Color.black], startPoint: .top, endPoint: .bottom)
             .opacity(0.5)
             .blendMode(.overlay)
-            .background(.purple)
+            .background(color)
     }
 }
 
@@ -273,6 +321,19 @@ extension Ingredient {
     }
 }
 
+struct ScalePulsingModifier: ViewModifier {
+    @State private var scale: CGFloat = 1
+
+    func body(content: Content) -> some View {
+        content
+            .scaleEffect(scale)
+            .animation(.easeInOut(duration: 1).repeatForever(), value: scale)
+            .onAppear {
+                scale = 0.95
+            }
+    }
+}
+
 //struct InlineTimer: View {
 //    var timer: CookTimer
 //    var body: some View {
@@ -343,8 +404,11 @@ struct FocusedScrollView<Item: Identifiable, V: View>: View {
     }
 }
 
+
+
 #Preview {
-    RecipeView(recipe: .stub, parsed: Recipe.stub.parsed!)
-        .navigationTitle("Recipe")
-        .navigationBarTitleDisplayMode(.inline)
+    BigIcon(name: "waveform.and.magnifyingglass")
+//    RecipeView(recipe: .stub, parsed: Recipe.stub.parsed!)
+//        .navigationTitle("Recipe")
+//        .navigationBarTitleDisplayMode(.inline)
 }

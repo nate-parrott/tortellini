@@ -54,10 +54,20 @@ class VoiceAssistant {
     var listeningTask: Task<Void, Never>?
     var debugStatus: String? {
         didSet {
-            print("[VoiceAssistant]: \(debugStatus)")
+            if debugStatus != oldValue {
+                if let lastDebugStatusTimeChange {
+                    print("[VoiceAssistant] \(Date().timeIntervalSinceReferenceDate - lastDebugStatusTimeChange.timeIntervalSinceReferenceDate)s elapsed")
+                }
+                print("[VoiceAssistant]: \(debugStatus)")
+                lastDebugStatusTimeChange = Date()
+            }
         }
     }
+    private var lastDebugStatusTimeChange: Date?
+    var recognizedSpeech = false
+    var responding = false
     let speechPauseBeforeAnswering: TimeInterval = 0.8
+    let noWakeWordGracePeriod: TimeInterval = 5
 
     var listening = false {
         didSet {
@@ -116,19 +126,38 @@ class VoiceAssistant {
         typing = false
     }
 
+    private var speechGenerator: any SpeechGenerator {
+        if let key = UserDefaults.standard.string(forKey: DefaultsKeys.elevenLabsAPIKey.rawValue)?.nilIfEmpty {
+            return ElevenLabsSpeechGenerator(apiKey: key)
+        }
+        return AppleSpeechGenerator(managesAudioSession: false)
+    }
+
     private func listenLoop() async {
         if Task.isCancelled { return }
 
-        try? AVAudioSession.sharedInstance().setCategory(.playAndRecord)
-//        let gen = AppleSpeechGenerator(managesAudioSession: false)
+//        do {
+////            try AVAudioSession.sharedInstance().setCategory(.playAndRecord, options: [.overrideMutedMicrophoneInterruption, .allowBluetooth, .defaultToSpeaker])
+//            try AVAudioSession.sharedInstance().setCategory(.playback, options: [])
+//            try AVAudioSession.sharedInstance().setActive(true)
+//        } catch {
+//            debugStatus = "Failed to set up audio session"
+//            listening = false
+//            return
+//        }
+//        let gen = self.speechGenerator
 //        await gen.speak("Hi it's Tommy. I'm listening.")
 //        await gen.awaitFinishedSpeaking()
 
-        try? await Task.sleep(seconds: 1)
+        try? AVAudioSession.sharedInstance().setActive(true)
+
+        try? await Task.sleep(seconds: 0.1)
 
         if Task.isCancelled { return }
 
         debugStatus = "Listening"
+        try? AVAudioSession.sharedInstance().setCategory(.playAndRecord, options: [.allowBluetoothA2DP])
+//        try? AVAudioSession.sharedInstance().setActive(true)
         let rec = SpeechRecognizer()
         await rec.start()
 
@@ -150,7 +179,7 @@ class VoiceAssistant {
                 debugStatus = "Starting"
             case .finalizedText, .none: () // not expected; we don't finalize text
             case .recognizedText(let text):
-                if let lastSpokenResponseDate, lastSpokenResponseDate.isWithinPast(seconds: 10), text.nilIfEmptyOrJustWhitespace != nil {
+                if let lastSpokenResponseDate, lastSpokenResponseDate.isWithinPast(seconds: noWakeWordGracePeriod), text.nilIfEmptyOrJustWhitespace != nil {
                     allowSpeechWithoutWake = true
                     debugStatus = "Allowing speech without wake due to response"
                 }
@@ -166,6 +195,7 @@ class VoiceAssistant {
                 }()
 
                 if let lastUpdate = rec.lastTextUpdateDate, let postWakeText {
+                    self.recognizedSpeech = true
                     let elapsed = Date.now.timeIntervalSinceReferenceDate - lastUpdate.timeIntervalSinceReferenceDate
                     let delay = max(0, speechPauseBeforeAnswering - elapsed)
                     debugStatus = "Text: \(text); Pausing for \(delay)"
@@ -174,15 +204,24 @@ class VoiceAssistant {
                         // If still unchanged, the user has paused. Handle it!
                         debugStatus = "Pause done; time to send \(postWakeText) to llm"
                         do {
+                            responding = true
+                            recognizedSpeech = false
+
                             let promptMessages = await constructLLMMessages() + [LLMMessage(role: .user, content: postWakeText)]
                             let response = try await getLLM().complete(prompt: promptMessages).content.trimmingCharacters(in: .whitespacesAndNewlines)
 
+
                             if rec.status == state {
-                                debugStatus = "Success!"
+                                debugStatus = "LLM responded and text still valid"
                                 messages.append(.user(postWakeText))
                                 messages.append(.answer(response))
                                 rec.cancel()
-                                let gen = AppleSpeechGenerator()
+
+                                try AVAudioSession.sharedInstance().setCategory(.playback, options: [])
+//                                try AVAudioSession.sharedInstance().setCategory(.playback, options: [.overrideMutedMicrophoneInterruption, .defaultToSpeaker, .allowBluetooth])
+
+//                                try AVAudioSession.sharedInstance().setCategory(.playback)
+                                let gen = self.speechGenerator
                                 await gen.speak(response)
                                 await gen.awaitFinishedSpeaking()
                                 self.lastSpokenResponseDate = Date()
@@ -190,11 +229,15 @@ class VoiceAssistant {
                                 break singleAnswerLoop
                             } else {
                                 debugStatus = "LLM responded but text changed"
+                                responding = false
+                                recognizedSpeech = true
                             }
                         } catch {
                             debugStatus = "LLM error: \(error)"
                             rec.cancel()
                             self.listening = false
+                            self.recognizedSpeech = false
+                            self.responding = false
                             return
                         }
                     } else {
@@ -204,6 +247,9 @@ class VoiceAssistant {
                     debugStatus = "No trigger for dictation \(text)"
                 }
             }
+
+            self.recognizedSpeech = false
+            self.responding = false
 
             debugStatus = "Waiting for next status change"
             if let next = await rec.awaitChange(fromStatus: state) {
@@ -227,7 +273,7 @@ class VoiceAssistant {
 
 extension String {
     var textAfterWakeWord: String? {
-        let wakeWords = ["Hi Tommy", "Hey Tommy", "Hi Chef", "Hey Chef"]
+        let wakeWords = ["Hi Tommy", "Hey Tommy", "Hi Chef", "Hey Chef", "Hi Tortellini", "Hey Tortellini"]
         // Search case insensitive for this phrase
         for word in wakeWords {
             if let range = self.range(of: word, options: .caseInsensitive) {

@@ -1,4 +1,5 @@
 import Foundation
+import NaturalLanguage
 
 extension String {
     var nilIfEmpty: String? {
@@ -11,6 +12,18 @@ extension String {
 
     var trimmed: String {
         trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
+    var splitIntoSentences: [String] {
+        let tagger = NLTagger(tagSchemes: [.tokenType])
+        tagger.string = self
+        let range = self.startIndex..<self.endIndex
+        var sentences: [String] = []
+        tagger.enumerateTags(in: range, unit: .sentence, scheme: .tokenType) { (_, tokenRange) -> Bool in
+            sentences.append(String(self[tokenRange]))
+            return true
+        }
+        return sentences
     }
 
     public func truncateTail(maxLen: Int) -> String {
