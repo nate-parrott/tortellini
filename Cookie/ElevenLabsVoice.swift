@@ -45,7 +45,10 @@ public actor ElevenLabsSpeechGenerator: SpeechGenerator {
     public var options: Options
     let queuePlayer = AVQueuePlayer()
 
-    public init(apiKey: String, options: Options = .init(voiceId: "2ovNLFOsfyKPEWV5kqQi")) {
+    // 2ovNLFOsfyKPEWV5kqQi new yorker
+    // uOKBPmTKohrTzUALJELT british
+    // 3L3MjomRjzkkVi1ib9PX british "tommy t"
+    public init(apiKey: String, options: Options = .init(voiceId: "3L3MjomRjzkkVi1ib9PX")) {
         self.apiKey = apiKey
         self.options = options
     }
@@ -57,6 +60,11 @@ public actor ElevenLabsSpeechGenerator: SpeechGenerator {
     deinit {
         print("deinit")
     }
+
+    public func setOnReadyToSpeak(_ block: (() -> Void)?) {
+        self.onReadyToSpeak = block
+    }
+    public var onReadyToSpeak: (() -> Void)?
 
     //  MARK: - SpeechGenerator
 
@@ -130,6 +138,7 @@ public actor ElevenLabsSpeechGenerator: SpeechGenerator {
                     await self?._finishedPlayingItem(item.object as! AVPlayerItem)
                 }
             }
+            self.onReadyToSpeak?()
             queuePlayer.play()
 
         }

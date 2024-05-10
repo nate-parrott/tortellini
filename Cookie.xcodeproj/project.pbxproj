@@ -50,6 +50,8 @@
 		5FC77C0F2BED7308001CC443 /* AwaitPublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC77C0E2BED7308001CC443 /* AwaitPublisher.swift */; };
 		5FC77C112BED8461001CC443 /* DateUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC77C102BED8461001CC443 /* DateUtils.swift */; };
 		5FC77C132BED87BA001CC443 /* ElevenLabsVoice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC77C122BED87BA001CC443 /* ElevenLabsVoice.swift */; };
+		5FC77C152BEDC816001CC443 /* pad_flute_up.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 5FC77C142BEDC816001CC443 /* pad_flute_up.mp3 */; };
+		5FC77C172BEDC848001CC443 /* Sounds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC77C162BEDC848001CC443 /* Sounds.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -121,6 +123,8 @@
 		5FC77C0E2BED7308001CC443 /* AwaitPublisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AwaitPublisher.swift; sourceTree = "<group>"; };
 		5FC77C102BED8461001CC443 /* DateUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateUtils.swift; sourceTree = "<group>"; };
 		5FC77C122BED87BA001CC443 /* ElevenLabsVoice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElevenLabsVoice.swift; sourceTree = "<group>"; };
+		5FC77C142BEDC816001CC443 /* pad_flute_up.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = pad_flute_up.mp3; sourceTree = "<group>"; };
+		5FC77C162BEDC848001CC443 /* Sounds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sounds.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -178,8 +182,10 @@
 				5FC77BF72BEC378D001CC443 /* SpeechRecognizer.swift */,
 				5FC77BF92BEC3BCF001CC443 /* VoiceAssistant.swift */,
 				5FC77C122BED87BA001CC443 /* ElevenLabsVoice.swift */,
+				5FC77C162BEDC848001CC443 /* Sounds.swift */,
 				5FC77C052BED283B001CC443 /* LLM.swift */,
 				5FC77C0C2BED4BB4001CC443 /* String+CleanedUp.swift */,
+				5FC77C142BEDC816001CC443 /* pad_flute_up.mp3 */,
 				5FC77C002BEC8516001CC443 /* WebContent */,
 				5FC77BC02BEBFCE2001CC443 /* Utils */,
 				5FC77BB52BEBD938001CC443 /* Data */,
@@ -348,6 +354,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5FC77BAB2BEBD84B001CC443 /* Preview Assets.xcassets in Resources */,
+				5FC77C152BEDC816001CC443 /* pad_flute_up.mp3 in Resources */,
 				5FC77BA82BEBD84B001CC443 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -400,6 +407,7 @@
 				5FC77C022BEC851E001CC443 /* WebContent.swift in Sources */,
 				5FC77BB92BEBDCFA001CC443 /* Recipe.swift in Sources */,
 				5FC77BD82BEC1D79001CC443 /* Task.swift in Sources */,
+				5FC77C172BEDC848001CC443 /* Sounds.swift in Sources */,
 				5FC77C0D2BED4BB4001CC443 /* String+CleanedUp.swift in Sources */,
 				5FC77BBD2BEBEBC9001CC443 /* Stubs.swift in Sources */,
 			);
@@ -556,6 +564,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Cookie/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Tortellini;
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "You can ask the voice assistant questions.";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "You can ask the voice assistant questions.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -589,6 +598,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Cookie/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Tortellini;
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "You can ask the voice assistant questions.";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "You can ask the voice assistant questions.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;

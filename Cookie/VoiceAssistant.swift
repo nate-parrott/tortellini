@@ -66,7 +66,7 @@ class VoiceAssistant {
     private var lastDebugStatusTimeChange: Date?
     var recognizedSpeech = false
     var responding = false
-    let speechPauseBeforeAnswering: TimeInterval = 0.8
+    let speechPauseBeforeAnswering: TimeInterval = 1
     let noWakeWordGracePeriod: TimeInterval = 5
 
     var listening = false {
@@ -137,9 +137,10 @@ class VoiceAssistant {
         if Task.isCancelled { return }
 
 //        do {
-////            try AVAudioSession.sharedInstance().setCategory(.playAndRecord, options: [.overrideMutedMicrophoneInterruption, .allowBluetooth, .defaultToSpeaker])
-//            try AVAudioSession.sharedInstance().setCategory(.playback, options: [])
+//            try AVAudioSession.sharedInstance().setCategory(.playback, options: [.overrideMutedMicrophoneInterruption])
+////            try AVAudioSession.sharedInstance().setCategory(.playback, options: [])
 //            try AVAudioSession.sharedInstance().setActive(true)
+////            SystemSound.padFluteUp.play()
 //        } catch {
 //            debugStatus = "Failed to set up audio session"
 //            listening = false
@@ -149,14 +150,20 @@ class VoiceAssistant {
 //        await gen.speak("Hi it's Tommy. I'm listening.")
 //        await gen.awaitFinishedSpeaking()
 
-        try? AVAudioSession.sharedInstance().setActive(true)
+//        try? AVAudioSession.sharedInstance().setActive(true)
 
-        try? await Task.sleep(seconds: 0.1)
+        try? await Task.sleep(seconds: 0.01)
 
         if Task.isCancelled { return }
 
         debugStatus = "Listening"
-        try? AVAudioSession.sharedInstance().setCategory(.playAndRecord, options: [.allowBluetoothA2DP])
+        try? AVAudioSession.sharedInstance().setCategory(.record, options: [.allowBluetooth])
+//        try! AVAudioSession.sharedInstance().setCategory(.playAndRecord, mode: .voiceChat)
+        try! AVAudioSession.sharedInstance().setAllowHapticsAndSystemSoundsDuringRecording(true)
+        try? AVAudioSession.sharedInstance().setActive(true)
+
+//        SystemSound.padFluteUp.play()
+
 //        try? AVAudioSession.sharedInstance().setActive(true)
         let rec = SpeechRecognizer()
         await rec.start()
@@ -203,37 +210,43 @@ class VoiceAssistant {
                     if rec.status == state {
                         // If still unchanged, the user has paused. Handle it!
                         debugStatus = "Pause done; time to send \(postWakeText) to llm"
+                        rec.cancel()
                         do {
                             responding = true
                             recognizedSpeech = false
 
+                            try AVAudioSession.sharedInstance().setCategory(.playback, options: [])
+//                            try AVAudioSession.sharedInstance().setCategory(.playAndRecord, mode: .voiceChat)
+                            SystemSound.padFluteUp.play()
+
                             let promptMessages = await constructLLMMessages() + [LLMMessage(role: .user, content: postWakeText)]
                             let response = try await getLLM().complete(prompt: promptMessages).content.trimmingCharacters(in: .whitespacesAndNewlines)
 
+                            debugStatus = "LLM responded \(response)"
+                            messages.append(.user(postWakeText))
+                            messages.append(.answer(response))
 
-                            if rec.status == state {
-                                debugStatus = "LLM responded and text still valid"
-                                messages.append(.user(postWakeText))
-                                messages.append(.answer(response))
-                                rec.cancel()
-
-                                try AVAudioSession.sharedInstance().setCategory(.playback, options: [])
 //                                try AVAudioSession.sharedInstance().setCategory(.playback, options: [.overrideMutedMicrophoneInterruption, .defaultToSpeaker, .allowBluetooth])
 
 //                                try AVAudioSession.sharedInstance().setCategory(.playback)
-                                let gen = self.speechGenerator
-                                await gen.speak(response)
-                                await gen.awaitFinishedSpeaking()
-                                self.lastSpokenResponseDate = Date()
-                                // TODO: Handle tools
-                                break singleAnswerLoop
-                            } else {
-                                debugStatus = "LLM responded but text changed"
-                                responding = false
-                                recognizedSpeech = true
+                            let gen = self.speechGenerator
+                            if let eleven = gen as? ElevenLabsSpeechGenerator {
+                                await eleven.setOnReadyToSpeak {
+                                    SystemSound.padFluteUp.player.stop()
+                                }
                             }
+                            await gen.speak(response)
+                            await gen.awaitFinishedSpeaking()
+                            self.lastSpokenResponseDate = Date()
+                            // TODO: Handle tools
+                            break singleAnswerLoop
+//                            else {
+//                                debugStatus = "LLM responded but text changed"
+//                                responding = false
+//                                recognizedSpeech = true
+//                            }
                         } catch {
-                            debugStatus = "LLM error: \(error)"
+                            debugStatus = "Response error: \(error)"
                             rec.cancel()
                             self.listening = false
                             self.recognizedSpeech = false
@@ -304,6 +317,8 @@ extension AppState {
         A user is cooking or reading a recipe. Your job is to provide QUICK, TERSE answers to their questions hands-free while they cook.
 
         For example, if a user asked 'how long do I cook the chicken?', you'd refer to the recipe and say something like "Cook the chicken 7 minutes per side on high heat."
+
+        You must expand numbers and unit abbreviations like "tbsp" and "oz" and "hr" to full words. If a recipe calls for "1.5 oz honey", and the user asks how much honey, say "one and a half ounces of honey", NOT "1.5 oz of honey".
 
         The user may have some cooking timers active, which you can answer questions about, like "how long left on the vegetables?"
         """)

@@ -62,6 +62,9 @@ struct RecipesWindow: View {
         }
         .onAppear {
             UIApplication.shared.isIdleTimerDisabled = true
+//            SystemSound.padFluteUp.play()
+
+            SystemSound.preload()
         }
     }
 

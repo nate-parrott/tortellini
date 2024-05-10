@@ -231,6 +231,8 @@ struct StepView: View {
 struct FormattedTextView: View {
     var parts: [Step.FormattedText]
 
+    @State private var showingMissingInfoForIngredient: Ingredient?
+
     var body: some View {
         WrappingHStack(alignment: .leading, horizontalSpacing: 0, verticalSpacing: 0, fitContentWidth: false) {
             ForEachUnidentifiable(items: parts) { part in
@@ -254,8 +256,12 @@ struct FormattedTextView: View {
             ForEach(ingredient.text.cleanedUp.splittingButKeepingSpaces.identifiableByIndices) { tuple in
                 Text(tuple.item)
                     .foregroundStyle(.purple)
+                    .textTap {
+                        tapped(ingredient: ingredient)
+                    }
+//                    .modifier(IngredientPopoverOnTap(ingredient: ingredient))
             }
-            if let missingInfo = ingredient.missingInfo?.nilIfEmpty?.cleanedUp {
+            if let missingInfo = ingredient.missingInfo?.nilIfEmpty?.cleanedUp, showingMissingInfoForIngredient == ingredient {
                 let text = " (" + missingInfo + ")"
                 ForEach(text.splittingButKeepingSpaces.identifiableByIndices) {
                     Text($0.item)
@@ -278,6 +284,21 @@ struct FormattedTextView: View {
                 }
                 .foregroundStyle(.blue)
             }
+        }
+    }
+
+    private func tapped(ingredient: Ingredient) {
+        if ingredient.missingInfo != nil {
+            UISelectionFeedbackGenerator().selectionChanged()
+            withAnimation(.snappy) {
+                if showingMissingInfoForIngredient == ingredient {
+                    showingMissingInfoForIngredient = nil
+                } else {
+                    showingMissingInfoForIngredient = ingredient
+                }
+            }
+        } else {
+            UINotificationFeedbackGenerator().notificationOccurred(.error)
         }
     }
 }
@@ -327,7 +348,7 @@ struct ScalePulsingModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             .scaleEffect(scale)
-            .animation(.easeInOut(duration: 1).repeatForever(), value: scale)
+            .animation(.easeInOut(duration: 2).repeatForever(autoreverses: true), value: scale)
             .onAppear {
                 scale = 0.95
             }
@@ -404,11 +425,58 @@ struct FocusedScrollView<Item: Identifiable, V: View>: View {
     }
 }
 
+struct IngredientPopoverOnTap: ViewModifier {
+    var ingredient: Ingredient
 
+    @State private var showPopover = false
+
+    func body(content: Content) -> some View {
+        content
+            .overlay {
+                Color.white.opacity(0.01)
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        let alert = UIAlertController(title: ingredient.text, message: ingredient.missingInfo ?? "No additional info", preferredStyle: .alert)
+                        alert.addAction(UIAlertAction(title: "Okay", style: .default))
+                        UIApplication.shared.showAlert(alert)
+//                        showPopover = true
+                    }
+                    .padding(-5)
+            }
+//            .popover(isPresented: $showPopover, content: {
+//                HStack {
+//                    EmojiView(emoji: ingredient.emoji)
+//                    Text(ingredient.text)
+//                    if let missingInfo = ingredient.missingInfo {
+//                        Text(missingInfo).foregroundStyle(.secondary)
+//                    }
+//                }
+//                .padding()
+//            })
+    }
+}
+
+extension View {
+    @ViewBuilder
+    func textTap(_ block: @escaping () -> Void) -> some View {
+        self
+            .overlay {
+                Color.white.opacity(0.01)
+                    .contentShape(Rectangle())
+//                    .border(.red)
+                    .onTapGesture {
+                        block()
+                    }
+                    .padding(.vertical, -8)
+                    .padding(.horizontal, -4)
+            }
+    }
+}
 
 #Preview {
-    BigIcon(name: "waveform.and.magnifyingglass")
-//    RecipeView(recipe: .stub, parsed: Recipe.stub.parsed!)
-//        .navigationTitle("Recipe")
-//        .navigationBarTitleDisplayMode(.inline)
+//    BigIcon(name: "waveform.and.magnifyingglass")
+//        .modifier(ScalePulsingModifier())
+    RecipeView(recipe: .stub, parsed: Recipe.stub.parsed!)
+        .navigationTitle("Recipe")
+        .navigationBarTitleDisplayMode(.inline)
 }

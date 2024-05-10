@@ -93,7 +93,7 @@ extension ParsedRecipe {
         Rule: Wrap each step in <step> tags. Keep the number of steps the same as in the input.
 
         Rule: Wrap mentions of ingredients in <ingredient> tags.
-        Use the missing-details attribute to add AMOUNT and PREPARATION information drawn from the ingredients list, if not present in the step itself. For example, if the step says "Add the cilantro", and the ingredients list calls for "1 cup cilanto, finely chopped", the you'd write "1 cup, finely chopped" in the missing-info field.
+        Each <ingredient> tag should have a `details` attribute that tells you the amount of ingredient, and the preparation (diced, chopped, toasted, etc), if it's known from the ingredients list. For example, if the step says "Add the cilantro", and the ingredients list calls for "1 cup cilanto, finely chopped", the you'd write "1 cup, finely chopped" in the details field.
 
         Rule: Wrap each mention of a cook timer in a <timer> tag, so the user can tap to set a timer.
         If the recipe calls for repeating an action multiple times (e.g. "cook 7 minutes each side") set `repeat` appropriately, otherwise keep it at  1.
@@ -102,7 +102,7 @@ extension ParsedRecipe {
 
         Rule: When wrapping things in <ingredient> or <timer>, do not change the inner text. Wrap in tags, don't rewrite.
 
-        Ingredients tags look like this: <ingredient emoji="🧈" missing-details="10 oz">butter or ghee</ingredient>. Choose a related FOOD or DRINK emoji. Always fill out missing-details if the step is missing amount or prep information that's present in the ingredients list.
+        Ingredients tags look like this: <ingredient emoji="🧈" details="10 oz">butter or ghee</ingredient>. Choose a related FOOD or DRINK emoji.
 
         Timer tags look like this: <timer hours={0} minutes={6} repeat={1} name>cook 6 minutes each side until crispy</timer>.
         Use repeat={2} when the recipe says to cook something N minutes per side.
@@ -121,13 +121,13 @@ extension ParsedRecipe {
         Your output:
         ```
         <step index={1}>
-        <ingredient emoji="🧂">Salt</ingredient> and boil <ingredient emoji="💧">2 cups water</ingredient> on high heat, then add <ingredient emoji="🍝" missing-details="10oz">pasta</ingredient> and <timer hours={0} minutes={10} repeat={1}>boil for 10 minutes</timer>.
+        <ingredient emoji="🧂">Salt</ingredient> and boil <ingredient emoji="💧">2 cups water</ingredient> on high heat, then add <ingredient emoji="🍝" details="10oz">pasta</ingredient> and <timer hours={0} minutes={10} repeat={1}>boil for 10 minutes</timer>.
         </step>
         <step index={2}>
-        Stir in <ingredient emoji="🧈" missing-details="2oz">butter</ingredient> and <ingredient emoji="🌱" missing-details="1, finely chopped">half the scallions.</ingredient>.
+        Stir in <ingredient emoji="🧈" details="2oz">butter</ingredient> and <ingredient emoji="🌱" details="1, finely chopped">half the scallions.</ingredient>.
         </step>
         <step index={3}>
-        Garnish with the <ingredient emoji="🌱" missing-details="1, finely chopped">remaining scallions</ingredient> and serve.
+        Garnish with the <ingredient emoji="🌱" details="1, finely chopped">remaining scallions</ingredient> and serve.
         </step>
         ```
         """
@@ -230,7 +230,7 @@ private extension Step.FormattedText {
                 return nil
             }
             let text = element.stringValue.trimmingCharacters(in: .newlines)
-            let missingInfo = element.attr("missing-details")
+            let missingInfo = element.attr("details")
             return .ingredient(Ingredient(emoji: emoji, text: text, missingInfo: missingInfo))
 
         case "timer":
