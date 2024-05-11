@@ -419,6 +419,7 @@ struct FocusedScrollView<Item: Identifiable, V: View>: View {
                     view(item)
                 }
             }
+//            .modifier(SpeechEffect())
             Spacer().frame(height: 150)
         }
         .ignoresSafeArea([.container], edges: .top)

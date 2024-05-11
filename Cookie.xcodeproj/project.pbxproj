@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5F9DEA872BEF19B300B72D94 /* SpeechEffect.metal in Sources */ = {isa = PBXBuildFile; fileRef = 5F9DEA862BEF19B300B72D94 /* SpeechEffect.metal */; };
+		5F9DEA892BEF19DB00B72D94 /* SpeechEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9DEA882BEF19DB00B72D94 /* SpeechEffect.swift */; };
+		5FC22E3E2BF00E6A0072BC14 /* View+TouchDown.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC22E3D2BF00E6A0072BC14 /* View+TouchDown.swift */; };
+		5FC22E402BF00E9B0072BC14 /* Haptics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC22E3F2BF00E9B0072BC14 /* Haptics.swift */; };
 		5FC77BA42BEBD84A001CC443 /* CookieApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC77BA32BEBD84A001CC443 /* CookieApp.swift */; };
 		5FC77BA82BEBD84B001CC443 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5FC77BA72BEBD84B001CC443 /* Assets.xcassets */; };
 		5FC77BAB2BEBD84B001CC443 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5FC77BAA2BEBD84B001CC443 /* Preview Assets.xcassets */; };
@@ -82,6 +86,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		5F9DEA862BEF19B300B72D94 /* SpeechEffect.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = SpeechEffect.metal; sourceTree = "<group>"; };
+		5F9DEA882BEF19DB00B72D94 /* SpeechEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechEffect.swift; sourceTree = "<group>"; };
+		5FC22E3D2BF00E6A0072BC14 /* View+TouchDown.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+TouchDown.swift"; sourceTree = "<group>"; };
+		5FC22E3F2BF00E9B0072BC14 /* Haptics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Haptics.swift; sourceTree = "<group>"; };
 		5FC77BA02BEBD84A001CC443 /* Cookie.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Cookie.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5FC77BA32BEBD84A001CC443 /* CookieApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookieApp.swift; sourceTree = "<group>"; };
 		5FC77BA72BEBD84B001CC443 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -181,6 +189,8 @@
 				5FC77C072BED28ED001CC443 /* SettingsView.swift */,
 				5FC77BCD2BEC194F001CC443 /* RecipesList.swift */,
 				5FC77BBE2BEBEDBB001CC443 /* RecipeView.swift */,
+				5F9DEA862BEF19B300B72D94 /* SpeechEffect.metal */,
+				5F9DEA882BEF19DB00B72D94 /* SpeechEffect.swift */,
 				5FC77BFE2BEC84FF001CC443 /* Browser.swift */,
 				5FC77C1E2BEEDC8B001CC443 /* Browser+RecipeAdder.swift */,
 				5FC77BC32BEBFE28001CC443 /* Toolbox.swift */,
@@ -234,6 +244,8 @@
 				5FC77BC12BEBFCE9001CC443 /* SwiftUI+Convenience.swift */,
 				5FC77C0E2BED7308001CC443 /* AwaitPublisher.swift */,
 				5FC77C102BED8461001CC443 /* DateUtils.swift */,
+				5FC22E3D2BF00E6A0072BC14 /* View+TouchDown.swift */,
+				5FC22E3F2BF00E9B0072BC14 /* Haptics.swift */,
 				5FC77BC52BEBFE73001CC443 /* View+Measure.swift */,
 				5FC77BC72BEC01D0001CC443 /* StringUtils.swift */,
 				5FC77C1C2BEEDBB5001CC443 /* URLUtils.swift */,
@@ -384,6 +396,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5FC22E402BF00E9B0072BC14 /* Haptics.swift in Sources */,
 				5FC77BBF2BEBEDBB001CC443 /* RecipeView.swift in Sources */,
 				5FC77BFA2BEC3BCF001CC443 /* VoiceAssistant.swift in Sources */,
 				5FC77C062BED283B001CC443 /* LLM.swift in Sources */,
@@ -401,6 +414,7 @@
 				5FC77C132BED87BA001CC443 /* ElevenLabsVoice.swift in Sources */,
 				5FC77BD62BEC1D06001CC443 /* AppState+Add.swift in Sources */,
 				5FC77C042BEC8523001CC443 /* WebView.swift in Sources */,
+				5F9DEA872BEF19B300B72D94 /* SpeechEffect.metal in Sources */,
 				5FC77C082BED28ED001CC443 /* SettingsView.swift in Sources */,
 				5FC77BCA2BEC091A001CC443 /* WrappingHStack.swift in Sources */,
 				5FC77BC22BEBFCE9001CC443 /* SwiftUI+Convenience.swift in Sources */,
@@ -409,7 +423,9 @@
 				5FC77BD02BEC1B16001CC443 /* URLHelpers.swift in Sources */,
 				5FC77BF42BEC26C2001CC443 /* RecipeAdder.swift in Sources */,
 				5FC77C112BED8461001CC443 /* DateUtils.swift in Sources */,
+				5F9DEA892BEF19DB00B72D94 /* SpeechEffect.swift in Sources */,
 				5FC77C212BEEEFEF001CC443 /* JsonLD.swift in Sources */,
+				5FC22E3E2BF00E6A0072BC14 /* View+TouchDown.swift in Sources */,
 				5FC77BF82BEC378D001CC443 /* SpeechRecognizer.swift in Sources */,
 				5FC77BB72BEBDAB7001CC443 /* DataStore+SwiftUI.swift in Sources */,
 				5FC77BFF2BEC84FF001CC443 /* Browser.swift in Sources */,

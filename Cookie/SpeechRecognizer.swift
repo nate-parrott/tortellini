@@ -54,6 +54,12 @@ class SpeechRecognizer {
         if status != .none {
             fatalError("Cannot reuse a SpeechRecognizer!")
         }
+
+        #if targetEnvironment(simulator)
+        fakeInputLoop()
+        return
+        #endif
+
         do {
             self.status = .starting
             // Check to see if we have the necessary permissions, or request tjem
@@ -131,6 +137,21 @@ class SpeechRecognizer {
         } catch {
             print("[SpeechRecognizer] Error: \(error)")
             self.status = .errored
+        }
+    }
+
+    private func fakeInputLoop() {
+        Task {
+            self.status = .starting
+            try? await Task.sleep(seconds: 0.5)
+            self.status = .recognizedText("")
+//            try? await Task.sleep(seconds: 3)
+//            self.status = .recognizedText("Hi")
+//            try? await Task.sleep(seconds: 0.2)
+//            self.status = .recognizedText("Hi chef")
+//            try? await Task.sleep(seconds: 0.3)
+//            self.status = .recognizedText("Hi chef how much butter is in this?")
+//            try? await Task.sleep(seconds: 2)
         }
     }
 
