@@ -17,28 +17,28 @@ struct CookieApp: App {
 }
 
 struct RecipesWindow: View {
-    @State private var adding: Addable?
+    @State private var adding: AddRecipeRequest?
     @State private var showSettings = false
-
-    struct Addable: Identifiable {
-        var id: URL { url }
-        var url: URL
-    }
+    @State private var showingBrowser = false
 
     var body: some View {
         NavigationStack {
             RecipesList()
-                .toolbar {
-                    ToolbarItem(placement: .topBarTrailing) {
+                .toolbar {                    ToolbarItemGroup(placement: .topBarTrailing) {
                         Button(action: { showSettings = true }) {
                             Image(systemName: "person.crop.circle")
                                 .accessibilityLabel("Settings and Profile")
                         }
+
+                    Button(action: paste) {
+                        Image(systemName: "doc.on.clipboard")
+                            .accessibilityLabel("Paste URL and Add Recipe")
                     }
-                    ToolbarItem(placement: .topBarTrailing) {
-                        Button(action: addViaURL) {
+
+
+                        Button(action: { showingBrowser = true }) {
                             Image(systemName: "plus.circle.fill")
-                                .accessibilityLabel("Add Recipe")
+                                .accessibilityLabel("Search for Recipe")
                         }
                     }
                 }
@@ -47,8 +47,11 @@ struct RecipesWindow: View {
 //                }
         }
         .sheet(item: $adding, content: { adding in
-            RecipeAdder(url: adding.url)
+            RecipeAdder(addRequest: adding)
                 .id(adding.url)
+        })
+        .sheet(isPresented: $showingBrowser, content: {
+            BrowserWithRecipeAdder()
         })
         .sheet(isPresented: $showSettings, content: {
             NavigationStack {
@@ -68,18 +71,24 @@ struct RecipesWindow: View {
         }
     }
 
-    private func addViaURL() {
-        Task {
-            guard let text = await UIApplication.shared.prompt(title: "Add Recipe", message: "Paste a link:", placeholder: "https://meatballs.com/gravy"),
-                  let url = URL(string: text)
-            else {
-                return
-            }
-            DispatchQueue.main.async {
-                self.adding = .init(url: url)
-            }
+    private func paste() {
+        if let url = UIPasteboard.general.url {
+            self.adding = .init(url: url)
         }
     }
+
+//    private func addViaURL() {
+//        Task {
+//            guard let text = await UIApplication.shared.prompt(title: "Add Recipe", message: "Paste a link:", placeholder: "https://meatballs.com/gravy"),
+//                  let url = URL(string: text)
+//            else {
+//                return
+//            }
+//            DispatchQueue.main.async {
+//                self.adding = .init(url: url)
+//            }
+//        }
+//    }
 
     private func handle(url: URL) {
         guard let parts = URLComponents(url: url, resolvingAgainstBaseURL: true) else {

@@ -28,7 +28,10 @@ extension Recipe {
             title: string // Remove SEO cruft from original title if present
             ingredients: Ingredient[]
             steps: Step[]
-            summary: string // Quick 10-word summary of the cooking process, like "Cook pasta, roast chicken and serve with sauce."
+            summary: string // Write a quick 10-word summary of the cooking process, like "Cook pasta, roast chicken and serve with sauce."
+            yield: string? // e.g. "4 servings" or "1 loaf". Only include if mentioned in recipe data.
+            prepTime: string? // e.g. "10 minutes" or "1 hour". Only include if mentioned in recipe data. Write in plain english.
+            cookTime: string? // e.g. "30 minutes" or "2 hours" Only include if mentioned in recipe data. Write in plain english.
         }
 
         interface Ingredient {
@@ -41,6 +44,9 @@ extension Recipe {
             title: string // a descriptive 2-4 word title, like "Braise the Beef" or "Cook the Couscous". Avoid titles like "Step 1" -- write a more descriptive title instead. Each step's title should be unique; no repeats.
         }
         ```
+
+        Here are some good food-related emoji you might use for the `Ingredient.emoji` field (you can also use others):
+        🧅🍏🍍🍇🥥🫛🌽🫑🥩🧀🥔🥚🌶️🍅🧂🧈🐟🍤🥬
 
         Your `Recipe` object below, and no other commentary, in a ```code block```:
         """
@@ -58,6 +64,9 @@ extension Recipe {
             var ingredients: [Ingredient]?
             var steps: [Step]?
             var summary: String?
+            var yield: String?
+            var prepTime: String?
+            var cookTime: String?
         }
 
 //        let output = try await ClaudeNewAPI(credentials: .getSharedCredsOrThrow(), options: .init(model: .claude3Haiku, maxTokens: 4000, responsePrefix: responsePrefix))
@@ -67,7 +76,10 @@ extension Recipe {
                 title: output.title ?? title,
                 description: output.summary,
                 steps: output.steps ?? [],
-                ingredients: output.ingredients ?? []
+                ingredients: output.ingredients ?? [],
+                yield: output.yield,
+                cookTime: output.cookTime,
+                prepTime: output.prepTime
             )
         }
     }
@@ -212,7 +224,7 @@ extension ParsedRecipe {
         return """
         Title: \(title)
         Ingredients:
-        \(ingredients.map{ "- " + $0.text }.joined(separator: "\n"))
+        \(ingredients.map{ "- " + $0.emoji + " " + $0.text }.joined(separator: "\n"))
         Steps:
         \(steps.enumerated().map({ (i, step) in
         return "\(i + 1). \(step.text)"

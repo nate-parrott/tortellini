@@ -15,12 +15,12 @@ struct SettingsView: View {
 
     var body: some View {
         Form {
-            Section(header: Text("Anthropic API Key")) {
-                TextField("API Key", text: $anthropicKey)
-            }
-            Section(header: Text("OpenAI API Key")) {
-                TextField("API Key", text: $openAIKey)
-            }
+//            Section(header: Text("Anthropic API Key")) {
+//                TextField("API Key", text: $anthropicKey)
+//            }
+//            Section(header: Text("OpenAI API Key")) {
+//                TextField("API Key", text: $openAIKey)
+//            }
             Section(header: Text("OpenRouter API Key")) {
                 TextField("API Key", text: $openRouterKey)
             }

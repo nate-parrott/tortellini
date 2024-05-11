@@ -171,4 +171,20 @@ class WebContent: NSObject, WKNavigationDelegate, WKUIDelegate, ObservableObject
     private func refreshMetadataNow() {
         self.info = .init(url: webview.url, title: webview.title, canGoBack: webview.canGoBack, canGoForward: webview.canGoForward)
     }
+
+    // MARK: - JS
+    public func evaluateJavascript(_ script: String) async throws -> Any? {
+        try await withCheckedThrowingContinuation { cont in
+            DispatchQueue.main.async {
+                self.webview.evaluateJavaScript(script) { resultOpt, errOpt in
+                    if let errOpt {
+                        cont.resume(throwing: errOpt)
+                        return
+                    }
+                    cont.resume(returning: resultOpt)
+                }
+            }
+        }
+    }
 }
+

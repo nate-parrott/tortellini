@@ -52,6 +52,9 @@
 		5FC77C132BED87BA001CC443 /* ElevenLabsVoice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC77C122BED87BA001CC443 /* ElevenLabsVoice.swift */; };
 		5FC77C152BEDC816001CC443 /* pad_flute_up.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 5FC77C142BEDC816001CC443 /* pad_flute_up.mp3 */; };
 		5FC77C172BEDC848001CC443 /* Sounds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC77C162BEDC848001CC443 /* Sounds.swift */; };
+		5FC77C1D2BEEDBB5001CC443 /* URLUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC77C1C2BEEDBB5001CC443 /* URLUtils.swift */; };
+		5FC77C1F2BEEDC8B001CC443 /* Browser+RecipeAdder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC77C1E2BEEDC8B001CC443 /* Browser+RecipeAdder.swift */; };
+		5FC77C212BEEEFEF001CC443 /* JsonLD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC77C202BEEEFEF001CC443 /* JsonLD.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -125,6 +128,9 @@
 		5FC77C122BED87BA001CC443 /* ElevenLabsVoice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElevenLabsVoice.swift; sourceTree = "<group>"; };
 		5FC77C142BEDC816001CC443 /* pad_flute_up.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = pad_flute_up.mp3; sourceTree = "<group>"; };
 		5FC77C162BEDC848001CC443 /* Sounds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sounds.swift; sourceTree = "<group>"; };
+		5FC77C1C2BEEDBB5001CC443 /* URLUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLUtils.swift; sourceTree = "<group>"; };
+		5FC77C1E2BEEDC8B001CC443 /* Browser+RecipeAdder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Browser+RecipeAdder.swift"; sourceTree = "<group>"; };
+		5FC77C202BEEEFEF001CC443 /* JsonLD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonLD.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -176,6 +182,7 @@
 				5FC77BCD2BEC194F001CC443 /* RecipesList.swift */,
 				5FC77BBE2BEBEDBB001CC443 /* RecipeView.swift */,
 				5FC77BFE2BEC84FF001CC443 /* Browser.swift */,
+				5FC77C1E2BEEDC8B001CC443 /* Browser+RecipeAdder.swift */,
 				5FC77BC32BEBFE28001CC443 /* Toolbox.swift */,
 				5FC77BF32BEC26C2001CC443 /* RecipeAdder.swift */,
 				5FC77BF52BEC29F4001CC443 /* Footer.swift */,
@@ -208,6 +215,7 @@
 			children = (
 				5FC77BCB2BEC1800001CC443 /* AppState.swift */,
 				5FC77BD52BEC1D06001CC443 /* AppState+Add.swift */,
+				5FC77C202BEEEFEF001CC443 /* JsonLD.swift */,
 				5FC77BD72BEC1D79001CC443 /* Task.swift */,
 				5FC77BB12BEBD8EE001CC443 /* DataStore.swift */,
 				5FC77BB62BEBDAB7001CC443 /* DataStore+SwiftUI.swift */,
@@ -228,6 +236,7 @@
 				5FC77C102BED8461001CC443 /* DateUtils.swift */,
 				5FC77BC52BEBFE73001CC443 /* View+Measure.swift */,
 				5FC77BC72BEC01D0001CC443 /* StringUtils.swift */,
+				5FC77C1C2BEEDBB5001CC443 /* URLUtils.swift */,
 				5FC77BC92BEC091A001CC443 /* WrappingHStack.swift */,
 				5FC77BD12BEC1C86001CC443 /* PromptDialog.swift */,
 				5FC77BD32BEC1C9A001CC443 /* UIViewController+Topmost.swift */,
@@ -384,6 +393,7 @@
 				5FC77BD22BEC1C86001CC443 /* PromptDialog.swift in Sources */,
 				5FC77BC42BEBFE28001CC443 /* Toolbox.swift in Sources */,
 				5FC77BB22BEBD8EE001CC443 /* DataStore.swift in Sources */,
+				5FC77C1D2BEEDBB5001CC443 /* URLUtils.swift in Sources */,
 				5FC77BCC2BEC1800001CC443 /* AppState.swift in Sources */,
 				5FC77BA42BEBD84A001CC443 /* CookieApp.swift in Sources */,
 				5FC77BD42BEC1C9A001CC443 /* UIViewController+Topmost.swift in Sources */,
@@ -399,6 +409,7 @@
 				5FC77BD02BEC1B16001CC443 /* URLHelpers.swift in Sources */,
 				5FC77BF42BEC26C2001CC443 /* RecipeAdder.swift in Sources */,
 				5FC77C112BED8461001CC443 /* DateUtils.swift in Sources */,
+				5FC77C212BEEEFEF001CC443 /* JsonLD.swift in Sources */,
 				5FC77BF82BEC378D001CC443 /* SpeechRecognizer.swift in Sources */,
 				5FC77BB72BEBDAB7001CC443 /* DataStore+SwiftUI.swift in Sources */,
 				5FC77BFF2BEC84FF001CC443 /* Browser.swift in Sources */,
@@ -407,6 +418,7 @@
 				5FC77C022BEC851E001CC443 /* WebContent.swift in Sources */,
 				5FC77BB92BEBDCFA001CC443 /* Recipe.swift in Sources */,
 				5FC77BD82BEC1D79001CC443 /* Task.swift in Sources */,
+				5FC77C1F2BEEDC8B001CC443 /* Browser+RecipeAdder.swift in Sources */,
 				5FC77C172BEDC848001CC443 /* Sounds.swift in Sources */,
 				5FC77C0D2BED4BB4001CC443 /* String+CleanedUp.swift in Sources */,
 				5FC77BBD2BEBEBC9001CC443 /* Stubs.swift in Sources */,

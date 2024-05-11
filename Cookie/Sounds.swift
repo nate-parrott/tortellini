@@ -3,7 +3,7 @@ import AudioToolbox
 
 class SystemSound {
 //    let soundID: SystemSoundID
-    let player: AVAudioPlayer
+    private let player: AVAudioPlayer
 
 //    AVAudioPlayer *player = [[AVAudioPlayer alloc] initWithContentsOfURL:[NSURL fileURLWithPath:path] error:&err];
 //    [player prepareToPlay];
@@ -23,6 +23,11 @@ class SystemSound {
 
         player.play()
 //        AudioServicesPlaySystemSound(soundID)
+    }
+
+    func stop() {
+        player.stop()
+        player.currentTime = 0
     }
 
     static let padFluteUp = SystemSound(name: "pad_flute_up")

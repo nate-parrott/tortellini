@@ -2,7 +2,7 @@ import SwiftUI
 
 // Do not reuse for multiple urls
 struct RecipeAdder: View {
-    var url: URL
+    var addRequest: AddRecipeRequest
 
     @State private var id: String = "???"
     @State private var error: String?
@@ -45,7 +45,7 @@ struct RecipeAdder: View {
 
         Task {
             do {
-                try await AppStore.shared.addRecipe(fromURL: url, id: id)
+                try await AppStore.shared.addRecipe(fromURL: addRequest.url, html: addRequest.html, id: id)
             } catch {
                 self.error = "I couldn't add this recipe"
                 print("Recipe add error: \(error)")

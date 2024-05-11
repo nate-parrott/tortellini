@@ -1,13 +1,13 @@
 import SwiftUI
 
 enum Styling {
-    static let padding: CGFloat = 22
-    static let appBodyLineSpacing: CGFloat = 12
+    static let padding: CGFloat = 18
+    static let appBodyLineSpacing: CGFloat = 10
 }
 
 extension Font {
     static var appBody: Font {
-        .system(.title3, design: .rounded, weight: .medium)
+        .system(.body, design: .rounded, weight: .medium)
     }
 }
 
@@ -205,7 +205,7 @@ struct StepView: View {
     var generating: Bool
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 20) {
+        VStack(alignment: .leading, spacing: 14) {
             (
                 Text("\(idx + 1)  ").foregroundStyle(.tertiary)
                 + Text(step.title)

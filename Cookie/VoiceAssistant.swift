@@ -157,7 +157,7 @@ class VoiceAssistant {
         if Task.isCancelled { return }
 
         debugStatus = "Listening"
-        try? AVAudioSession.sharedInstance().setCategory(.record, options: [.allowBluetooth])
+        try? AVAudioSession.sharedInstance().setCategory(.record, mode: .measurement, options: .duckOthers)
 //        try! AVAudioSession.sharedInstance().setCategory(.playAndRecord, mode: .voiceChat)
         try! AVAudioSession.sharedInstance().setAllowHapticsAndSystemSoundsDuringRecording(true)
         try? AVAudioSession.sharedInstance().setActive(true)
@@ -215,7 +215,7 @@ class VoiceAssistant {
                             responding = true
                             recognizedSpeech = false
 
-                            try AVAudioSession.sharedInstance().setCategory(.playback, options: [])
+                            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .voicePrompt)
 //                            try AVAudioSession.sharedInstance().setCategory(.playAndRecord, mode: .voiceChat)
                             SystemSound.padFluteUp.play()
 
@@ -232,7 +232,7 @@ class VoiceAssistant {
                             let gen = self.speechGenerator
                             if let eleven = gen as? ElevenLabsSpeechGenerator {
                                 await eleven.setOnReadyToSpeak {
-                                    SystemSound.padFluteUp.player.stop()
+                                    SystemSound.padFluteUp.stop()
                                 }
                             }
                             await gen.speak(response)

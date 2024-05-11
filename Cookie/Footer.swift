@@ -77,20 +77,22 @@ struct AssistantMuteView: View {
 
     var body: some View {
         HStack {
-            Image(systemName: "mic.fill")
-                .font(.system(size: 26))
-                .foregroundStyle(active ? Color.white : Color.red)
+            Image(systemName: "mic.circle.fill")
+                .font(.system(size: 24))
 
 
-            if active {
-                if isOnlyItem {
-                    Text("Say ") + Text(" “Hey, Chef”")
+            Group {
+                if active {
+                    if isOnlyItem {
+                        Text("Say ") + Text(" “Hey, Chef”")
+                    } else {
+                        Text("Say ") + Text(" “Hey, Chef...”")
+                    }
                 } else {
-                    Text("Say ") + Text(" “Hey, Chef...”")
+                    Text("Voice Assistant")
                 }
-            } else {
-                Text("Voice Assistant")
             }
+            .font(.system(size: 18, weight: .semibold, design: .rounded))
         }
     }
 }
@@ -101,22 +103,33 @@ struct FooterButtonStyle: ButtonStyle {
 
     func makeBody(configuration: Configuration) -> some View {
         let scale = configuration.isPressed ? 0.9 : 1
+        let shape = RoundedRectangle(cornerRadius: 8, style: .continuous)
+
         configuration.label
-            .padding(.leading, 6)
+            .padding(.leading, 14)
             .padding(.vertical, 6)
             .padding(.trailing, 12)
 //            .fixedSize(horizontal: footerItemsCount , vertical: /*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
 //            .frame(width: footerItemsCount <= 2 ? nil : 200, height: 50, alignment: .leading)
+            .frame(height: 60)
             .frame(maxWidth: footerItemsCount <= 2 ? .infinity : nil, alignment: .leading)
             .foregroundStyle(.white)
             .font(.system(.body, design: .rounded, weight: .medium))
             .multilineTextAlignment(.leading)
             .background {
-                RoundedRectangle(cornerRadius: 8, style: .continuous)
-                    .fill(highlightColor ?? Color.white.opacity(0.25))
+                shape
+                    .fill(Color.white.opacity(0.25))
+
+                if let highlightColor {
+                    shape.fill(highlightColor)
+
+                    shape.fill(LinearGradient(colors: [Color.white, Color.black], startPoint: .top, endPoint: .bottom))
+                        .blendMode(.overlay)
+                        .opacity(0.5)
+                }
             }
-            .scaleEffect(scale)
-            .animation(.bouncy, value: scale)
+//            .scaleEffect(scale)
+//            .animation(.bouncy, value: scale)
     }
 }
 
