@@ -25,7 +25,7 @@ struct VoiceAssistantButton: View {
 
             Group {
                 if active {
-                    Text("Say ") + Text(" “Hey, Chef”")
+                    Text("Say ") + Text(" “Hey, Tortellini”")
                 } else {
                     Text("Voice Assistant")
                 }

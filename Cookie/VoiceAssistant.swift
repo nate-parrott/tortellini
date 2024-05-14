@@ -4,8 +4,7 @@ import ChatToys
 import Foundation
 
 @MainActor
-@Observable
-class VoiceAssistant {
+class VoiceAssistant: ObservableObject {
     nonisolated init() {}
 
     enum Message: Equatable {
@@ -48,11 +47,11 @@ class VoiceAssistant {
         }
     }
 
-    var messages = [Message]()
-    var typing = false
+    @Published var messages = [Message]()
+    @Published var typing = false
     var lastSpokenResponseDate: Date? // When did the system finish speaking its last response
-    var listeningTask: Task<Void, Never>?
-    var debugStatus: String? {
+    private var listeningTask: Task<Void, Never>?
+    @Published var debugStatus: String? {
         didSet {
             if debugStatus != oldValue {
                 if let lastDebugStatusTimeChange {
@@ -64,14 +63,15 @@ class VoiceAssistant {
         }
     }
     private var lastDebugStatusTimeChange: Date?
-    var recognizedSpeech = false
-    var responding = false
-    let speechPauseBeforeAnswering: TimeInterval = 1
+    @Published var recognizedSpeech = false
+    @Published var responding = false
+    let speechPauseBeforeAnswering: TimeInterval = 0.8
     let noWakeWordGracePeriod: TimeInterval = 5
 
     var listening = false {
         didSet {
             if listening != oldValue {
+                print("[VoiceAssistant] listening: \(listening)")
 
                 if listening {
 //                    try! AVAudioSession.sharedInstance().setCategory(.playAndRecord, mode: .default)
@@ -91,6 +91,7 @@ class VoiceAssistant {
     }
 
     deinit {
+        print("[VoiceAssistant] deinit")
         try? AVAudioSession.sharedInstance().setActive(false, options: [])
 //        listeningTask?.cancel()
     }
@@ -136,29 +137,12 @@ class VoiceAssistant {
     private func listenLoop() async {
         if Task.isCancelled { return }
 
-//        do {
-//            try AVAudioSession.sharedInstance().setCategory(.playback, options: [.overrideMutedMicrophoneInterruption])
-////            try AVAudioSession.sharedInstance().setCategory(.playback, options: [])
-//            try AVAudioSession.sharedInstance().setActive(true)
-////            SystemSound.padFluteUp.play()
-//        } catch {
-//            debugStatus = "Failed to set up audio session"
-//            listening = false
-//            return
-//        }
-//        let gen = self.speechGenerator
-//        await gen.speak("Hi it's Tommy. I'm listening.")
-//        await gen.awaitFinishedSpeaking()
-
-//        try? AVAudioSession.sharedInstance().setActive(true)
-
         try? await Task.sleep(seconds: 0.01)
 
         if Task.isCancelled { return }
 
         debugStatus = "Listening"
-        try? AVAudioSession.sharedInstance().setCategory(.record, mode: .measurement, options: .duckOthers)
-//        try! AVAudioSession.sharedInstance().setCategory(.playAndRecord, mode: .voiceChat)
+        try? AVAudioSession.sharedInstance().setCategory(.record, mode: .default, options: [.mixWithOthers])
         try! AVAudioSession.sharedInstance().setAllowHapticsAndSystemSoundsDuringRecording(true)
         try? AVAudioSession.sharedInstance().setActive(true)
 
@@ -226,10 +210,8 @@ class VoiceAssistant {
                             messages.append(.user(postWakeText))
                             messages.append(.answer(response))
 
-//                                try AVAudioSession.sharedInstance().setCategory(.playback, options: [.overrideMutedMicrophoneInterruption, .defaultToSpeaker, .allowBluetooth])
-
-//                                try AVAudioSession.sharedInstance().setCategory(.playback)
                             let gen = self.speechGenerator
+                            await gen.setManagesAudioSession(false)
                             if let eleven = gen as? ElevenLabsSpeechGenerator {
                                 await eleven.setOnReadyToSpeak {
                                     SystemSound.padFluteUp.stop()

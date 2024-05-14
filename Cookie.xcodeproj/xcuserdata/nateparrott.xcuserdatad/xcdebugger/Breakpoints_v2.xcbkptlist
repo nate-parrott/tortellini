@@ -94,8 +94,8 @@
             filePath = "Cookie/VoiceAssistant.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "137"
-            endingLineNumber = "137"
+            startingLineNumber = "138"
+            endingLineNumber = "138"
             landmarkName = "listenLoop()"
             landmarkType = "7">
          </BreakpointContent>

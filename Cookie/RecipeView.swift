@@ -15,7 +15,7 @@ struct RecipeView: View {
     var recipe: Recipe
     var parsed: ParsedRecipe
 
-    @State private var voiceAssistant = VoiceAssistant()
+    @StateObject private var voiceAssistant = VoiceAssistant()
 
     var body: some View {
         VStack(spacing: 0) {
