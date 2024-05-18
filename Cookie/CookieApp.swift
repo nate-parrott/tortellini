@@ -24,7 +24,7 @@ struct RecipesWindow: View {
     var body: some View {
         NavigationStack {
             RecipesList()
-                .toolbar {                    ToolbarItemGroup(placement: .topBarTrailing) {
+                .toolbar { ToolbarItemGroup(placement: .topBarTrailing) {
                         Button(action: { showSettings = true }) {
                             Image(systemName: "person.crop.circle")
                                 .accessibilityLabel("Settings and Profile")
@@ -65,6 +65,8 @@ struct RecipesWindow: View {
         }
         .onAppear {
             UIApplication.shared.isIdleTimerDisabled = true
+
+            _ = LocalNotificationManager.shared // Ensure created
 //            SystemSound.padFluteUp.play()
 
             SystemSound.preload()

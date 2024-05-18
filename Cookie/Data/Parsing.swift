@@ -117,8 +117,9 @@ extension ParsedRecipe {
         Ingredients tags look like this: <ingredient emoji="🧈" details="10 oz">butter or ghee</ingredient>. Choose a related FOOD or DRINK emoji.
 
         Timer tags look like this: <timer hours={0} minutes={6} repeat={1} name>cook 6 minutes each side until crispy</timer>.
+        Always fill in the hours and minutes. If the timer is a range, like 5-6 minutes, give the low end.
         Use repeat={2} when the recipe says to cook something N minutes per side.
-        
+
         Steps tags look like this: <step index={N}> // one-indexed
 
         Here are some examples:
@@ -252,7 +253,7 @@ private extension Step.FormattedText {
             let repeats = element.attr("repeat")?.parsedAsInt
             return .timer(CookTimer(
                 asText: element.stringValue.trimmingCharacters(in: .newlines),
-                seconds: seconds, 
+                seconds: seconds,
                 repeats: repeats)
             )
 

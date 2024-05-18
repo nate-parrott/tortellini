@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5F82260C2BF88A4E00D00446 /* TimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F82260B2BF88A4E00D00446 /* TimerView.swift */; };
+		5F82260F2BF893C100D00446 /* TimerOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F82260E2BF893C100D00446 /* TimerOverlay.swift */; };
+		5F8226112BF8A6D300D00446 /* CGUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8226102BF8A6D300D00446 /* CGUtils.swift */; };
+		5F8226132BF8AC3B00D00446 /* LocalNotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8226122BF8AC3B00D00446 /* LocalNotificationManager.swift */; };
 		5F9DEA872BEF19B300B72D94 /* SpeechEffect.metal in Sources */ = {isa = PBXBuildFile; fileRef = 5F9DEA862BEF19B300B72D94 /* SpeechEffect.metal */; };
 		5F9DEA892BEF19DB00B72D94 /* SpeechEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9DEA882BEF19DB00B72D94 /* SpeechEffect.swift */; };
 		5FC22E3E2BF00E6A0072BC14 /* View+TouchDown.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC22E3D2BF00E6A0072BC14 /* View+TouchDown.swift */; };
@@ -37,7 +41,6 @@
 		5FC77BE32BEC2214001CC443 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5FC77BE22BEC2214001CC443 /* Media.xcassets */; };
 		5FC77BE52BEC2214001CC443 /* ActionRequestHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC77BE42BEC2214001CC443 /* ActionRequestHandler.swift */; };
 		5FC77BE72BEC2214001CC443 /* Action.js in Resources */ = {isa = PBXBuildFile; fileRef = 5FC77BE62BEC2214001CC443 /* Action.js */; };
-		5FC77BEB2BEC2214001CC443 /* SaveRecipe.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 5FC77BDD2BEC2214001CC443 /* SaveRecipe.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		5FC77BF22BEC2681001CC443 /* UIApplication+DismissModals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC77BF12BEC2681001CC443 /* UIApplication+DismissModals.swift */; };
 		5FC77BF42BEC26C2001CC443 /* RecipeAdder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC77BF32BEC26C2001CC443 /* RecipeAdder.swift */; };
 		5FC77BF62BEC29F4001CC443 /* Footer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC77BF52BEC29F4001CC443 /* Footer.swift */; };
@@ -61,16 +64,6 @@
 		5FC77C212BEEEFEF001CC443 /* JsonLD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC77C202BEEEFEF001CC443 /* JsonLD.swift */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		5FC77BE92BEC2214001CC443 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 5FC77B982BEBD84A001CC443 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 5FC77BDC2BEC2214001CC443;
-			remoteInfo = SaveRecipe;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXCopyFilesBuildPhase section */
 		5FC77BEF2BEC2214001CC443 /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -78,7 +71,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				5FC77BEB2BEC2214001CC443 /* SaveRecipe.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -86,6 +78,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		5F82260B2BF88A4E00D00446 /* TimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerView.swift; sourceTree = "<group>"; };
+		5F82260E2BF893C100D00446 /* TimerOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerOverlay.swift; sourceTree = "<group>"; };
+		5F8226102BF8A6D300D00446 /* CGUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGUtils.swift; sourceTree = "<group>"; };
+		5F8226122BF8AC3B00D00446 /* LocalNotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalNotificationManager.swift; sourceTree = "<group>"; };
 		5F9DEA862BEF19B300B72D94 /* SpeechEffect.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = SpeechEffect.metal; sourceTree = "<group>"; };
 		5F9DEA882BEF19DB00B72D94 /* SpeechEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechEffect.swift; sourceTree = "<group>"; };
 		5FC22E3D2BF00E6A0072BC14 /* View+TouchDown.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+TouchDown.swift"; sourceTree = "<group>"; };
@@ -162,6 +158,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5F82260D2BF893B300D00446 /* Timers */ = {
+			isa = PBXGroup;
+			children = (
+				5F82260B2BF88A4E00D00446 /* TimerView.swift */,
+				5F82260E2BF893C100D00446 /* TimerOverlay.swift */,
+			);
+			name = Timers;
+			sourceTree = "<group>";
+		};
 		5FC77B972BEBD84A001CC443 = {
 			isa = PBXGroup;
 			children = (
@@ -187,6 +192,7 @@
 				5FC77BF02BEC254F001CC443 /* Info.plist */,
 				5FC77BA32BEBD84A001CC443 /* CookieApp.swift */,
 				5FC77C072BED28ED001CC443 /* SettingsView.swift */,
+				5F8226122BF8AC3B00D00446 /* LocalNotificationManager.swift */,
 				5FC77BCD2BEC194F001CC443 /* RecipesList.swift */,
 				5FC77BBE2BEBEDBB001CC443 /* RecipeView.swift */,
 				5F9DEA862BEF19B300B72D94 /* SpeechEffect.metal */,
@@ -196,6 +202,7 @@
 				5FC77BC32BEBFE28001CC443 /* Toolbox.swift */,
 				5FC77BF32BEC26C2001CC443 /* RecipeAdder.swift */,
 				5FC77BF52BEC29F4001CC443 /* Footer.swift */,
+				5F82260D2BF893B300D00446 /* Timers */,
 				5FC77BF72BEC378D001CC443 /* SpeechRecognizer.swift */,
 				5FC77BF92BEC3BCF001CC443 /* VoiceAssistant.swift */,
 				5FC77C122BED87BA001CC443 /* ElevenLabsVoice.swift */,
@@ -242,6 +249,7 @@
 			isa = PBXGroup;
 			children = (
 				5FC77BC12BEBFCE9001CC443 /* SwiftUI+Convenience.swift */,
+				5F8226102BF8A6D300D00446 /* CGUtils.swift */,
 				5FC77C0E2BED7308001CC443 /* AwaitPublisher.swift */,
 				5FC77C102BED8461001CC443 /* DateUtils.swift */,
 				5FC22E3D2BF00E6A0072BC14 /* View+TouchDown.swift */,
@@ -300,7 +308,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				5FC77BEA2BEC2214001CC443 /* PBXTargetDependency */,
 			);
 			name = Cookie;
 			packageProductDependencies = (
@@ -398,6 +405,7 @@
 			files = (
 				5FC22E402BF00E9B0072BC14 /* Haptics.swift in Sources */,
 				5FC77BBF2BEBEDBB001CC443 /* RecipeView.swift in Sources */,
+				5F8226132BF8AC3B00D00446 /* LocalNotificationManager.swift in Sources */,
 				5FC77BFA2BEC3BCF001CC443 /* VoiceAssistant.swift in Sources */,
 				5FC77C062BED283B001CC443 /* LLM.swift in Sources */,
 				5FC77BC82BEC01D0001CC443 /* StringUtils.swift in Sources */,
@@ -416,6 +424,7 @@
 				5FC77C042BEC8523001CC443 /* WebView.swift in Sources */,
 				5F9DEA872BEF19B300B72D94 /* SpeechEffect.metal in Sources */,
 				5FC77C082BED28ED001CC443 /* SettingsView.swift in Sources */,
+				5F82260F2BF893C100D00446 /* TimerOverlay.swift in Sources */,
 				5FC77BCA2BEC091A001CC443 /* WrappingHStack.swift in Sources */,
 				5FC77BC22BEBFCE9001CC443 /* SwiftUI+Convenience.swift in Sources */,
 				5FC77BB42BEBD933001CC443 /* Queue.swift in Sources */,
@@ -427,12 +436,14 @@
 				5FC77C212BEEEFEF001CC443 /* JsonLD.swift in Sources */,
 				5FC22E3E2BF00E6A0072BC14 /* View+TouchDown.swift in Sources */,
 				5FC77BF82BEC378D001CC443 /* SpeechRecognizer.swift in Sources */,
+				5F82260C2BF88A4E00D00446 /* TimerView.swift in Sources */,
 				5FC77BB72BEBDAB7001CC443 /* DataStore+SwiftUI.swift in Sources */,
 				5FC77BFF2BEC84FF001CC443 /* Browser.swift in Sources */,
 				5FC77BF62BEC29F4001CC443 /* Footer.swift in Sources */,
 				5FC77BC62BEBFE73001CC443 /* View+Measure.swift in Sources */,
 				5FC77C022BEC851E001CC443 /* WebContent.swift in Sources */,
 				5FC77BB92BEBDCFA001CC443 /* Recipe.swift in Sources */,
+				5F8226112BF8A6D300D00446 /* CGUtils.swift in Sources */,
 				5FC77BD82BEC1D79001CC443 /* Task.swift in Sources */,
 				5FC77C1F2BEEDC8B001CC443 /* Browser+RecipeAdder.swift in Sources */,
 				5FC77C172BEDC848001CC443 /* Sounds.swift in Sources */,
@@ -450,14 +461,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		5FC77BEA2BEC2214001CC443 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 5FC77BDC2BEC2214001CC443 /* SaveRecipe */;
-			targetProxy = 5FC77BE92BEC2214001CC443 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		5FC77BAC2BEBD84B001CC443 /* Debug */ = {

@@ -24,8 +24,11 @@ struct RecipeView: View {
                     switch cell {
                     case .header:
                         RecipeHeader(recipe: recipe, parsed: parsed)
+
                     case .step(let idx, let step):
-                        StepView(idx: idx, step: step, generating: recipe.generating ?? false)
+                        StepView(idx: idx, step: step, generating: recipe.generating ?? false, recipeId: recipe.id)
+                            .frame(maxWidth: 650)
+                            .frame(maxWidth: .infinity)
                     }
                 }
                 .font(.appBody)
@@ -33,6 +36,9 @@ struct RecipeView: View {
             .lineSpacing(Styling.appBodyLineSpacing)
             .lineLimit(nil)
             .multilineTextAlignment(.leading)
+            .overlay {
+                TimerOverlay()
+            }
             .overlay(alignment: .bottom) {
                 voiceActivityOverlay
             }
@@ -113,20 +119,36 @@ private struct BigIcon: View {
 struct RecipeHeroImage: View {
     var url: URL?
 
+    @Environment(\.horizontalSizeClass) private var sizeClass
+
     var body: some View {
-        StretchyHero {
-            FillerGradient()
+        if sizeClass == .regular {
+            // ipad
+            Color.clear.aspectRatio(1.6, contentMode: .fit)
                 .overlay {
-                    AsyncImage(
-                        url: url,
-                        content: { $0.resizable().interpolation(.high).aspectRatio(contentMode: .fill).background(.white) }, 
-                        placeholder: { EmptyView() }
-                    )
+                    main
                 }
-//                Image("SampleHeader")
-//                    .resizable()
-//                    .aspectRatio(contentMode: .fill)
+                .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+                .shadow(color: Color.black.opacity(0.25), radius: 20, x: 0, y: 10)
+                .frame(maxWidth: 750)
+                .padding()
+                .padding(.top, 30)
+        } else {
+            StretchyHero {
+                main
+            }
         }
+    }
+
+    @ViewBuilder var main: some View {
+        FillerGradient()
+            .overlay {
+                AsyncImage(
+                    url: url,
+                    content: { $0.resizable().interpolation(.high).aspectRatio(contentMode: .fill).background(.white) },
+                    placeholder: { EmptyView() }
+                )
+            }
     }
 }
 
@@ -155,23 +177,27 @@ struct RecipeHeader: View {
                         .font(.system(size: 34, weight: .bold, design: .rounded))
                         .lineSpacing(6)
                         .padding(.top, 18)
+                        .frame(maxWidth: 650)
 
                     if let description = parsed.description {
                         Text(description.cleanedUp)
                             .lineSpacing(4)
                             .foregroundStyle(.secondary)
+                            .frame(maxWidth: 400)
                     }
                 }
                 .padding(.horizontal, 6)
 
                 if parsed.ingredients.count > 0 {
                     IngredientsUnit(ingredients: parsed.ingredients)
+                        .frame(maxWidth: 650)
                         .padding(.top, 12)
                 }
             }
             .padding(.horizontal, Styling.padding)
         }
         .multilineTextAlignment(.center)
+        .frame(maxWidth: .infinity)
     }
 }
 
@@ -203,6 +229,7 @@ struct StepView: View {
     var idx: Int // zero indexed
     var step: Step
     var generating: Bool
+    var recipeId: String
 
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
@@ -215,7 +242,7 @@ struct StepView: View {
             .font(.system(.title, design: .rounded, weight: .bold))
 
             if let formattedText = step.formattedText {
-                FormattedTextView(parts: formattedText )
+                FormattedTextView(parts: formattedText, recipeId: recipeId)
             } else {
                 Text(step.text)
                     .multilineTextAlignment(.leading)
@@ -230,6 +257,7 @@ struct StepView: View {
 
 struct FormattedTextView: View {
     var parts: [Step.FormattedText]
+    var recipeId: String
 
     @State private var showingMissingInfoForIngredient: Ingredient?
 
@@ -271,18 +299,35 @@ struct FormattedTextView: View {
 
             Text(ingredient.emoji)
         case .timer(let cookTimer):
+
             ForEach(cookTimer.asText.splittingButKeepingSpaces.identifiableByIndices) { tuple in
                 Group {
                     if tuple.index == 0 {
                         HStack(spacing: 3) {
                             Image(systemName: "clock.fill")
                             Text(tuple.item)
+                                .textTap {
+                                    tapped(timer: cookTimer)
+                                }
                         }
                     } else {
                         Text(tuple.item)
+                            .textTap {
+                                tapped(timer: cookTimer)
+                            }
                     }
                 }
                 .foregroundStyle(.blue)
+            }
+        }
+    }
+
+    func tapped(timer: CookTimer) {
+        AppStore.shared.modify { state in
+            if let existing = state.timers.first(where: { $0.original == timer }) {
+                state.focusedTimerId = existing.id
+            } else {
+                state.timers.append(InProgressTimer(id: UUID().uuidString, recipeId: recipeId, original: timer, repeatedAlready: 0, started: Date()))
             }
         }
     }

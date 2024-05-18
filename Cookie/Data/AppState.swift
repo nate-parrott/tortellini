@@ -2,9 +2,11 @@ import Foundation
 
 struct AppState: Equatable, Codable {
     var recipes = [String: Recipe]()
-    var timers = [InProgressTimer]()
     var voiceAssistantActive = false
     var lastActiveRecipe: String?
+
+    var timers = [InProgressTimer]()
+    var focusedTimerId: String?
 }
 
 class AppStore: DataStore<AppState> {
@@ -32,11 +34,32 @@ struct InProgressTimer: Equatable, Codable, Identifiable {
     var original: CookTimer
     var repeatedAlready: Int
     var started: Date
+    var unitPos: CGPoint = .init(x: 0, y: 1) // only valid vals are 0 and 1
+
+    var remainingRepeats: Int {
+        max(0, (original.repeats ?? 1) - repeatedAlready - 1)
+    }
+
+    var remainingSeconds: Int {
+        get {
+            let elapsedSeconds = Int(Date().timeIntervalSince(started))
+            let remainingSecs = max(0, original.seconds - elapsedSeconds)
+            return remainingSecs
+        } set {
+            // elapsed = now - start
+            // remaining = duration - elapsed
+            // remaining = duration - (now - start)
+            // remaining = start + duration - now
+            // remaining + now - duration = start
+            started = Date(timeIntervalSinceReferenceDate: TimeInterval(newValue) + Date.timeIntervalSinceReferenceDate - TimeInterval(original.seconds))
+        }
+    }
 
     var remainingTime: String {
         // Format like 5:21 or 1:00:00
-        let elapsedSeconds = Int(Date().timeIntervalSince(started))
-        let remainingSecs = max(0, original.seconds - elapsedSeconds)
+        if remainingSeconds == 0 {
+            return "00:00"
+        }
         let formatter = DateComponentsFormatter()
         if original.seconds < 3600 {
             formatter.allowedUnits = [.minute, .second]
@@ -44,7 +67,14 @@ struct InProgressTimer: Equatable, Codable, Identifiable {
             formatter.allowedUnits = [.hour, .minute, .second]
         }
         formatter.unitsStyle = .positional
-        return formatter.string(from: TimeInterval(remainingSecs)) ?? "0:00"
+        formatter.zeroFormattingBehavior = .pad
+        return formatter.string(from: TimeInterval(remainingSeconds)) ?? "0:00"
+    }
+
+    var isFinished: Bool {
+        let elapsedSeconds = Int(Date().timeIntervalSince(started))
+        let remainingSecs = max(0, original.seconds - elapsedSeconds)
+        return remainingSecs == 0
     }
 
     var totalTime: String {

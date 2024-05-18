@@ -15,6 +15,9 @@ struct RecipesList: View {
                     }
                 }
         }
+        .overlay {
+            TimerOverlay()
+        }
         .onReceive(AppStore.shared.publisher.map(\.recipes)) { self.recipes = $0 }
         .navigationTitle("Recipes")
         .sheet(item: showingRecipeBinding) { recipe in

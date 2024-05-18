@@ -5,8 +5,10 @@ struct Footer: View {
 
     var body: some View {
         VoiceAssistantButton(active: .init(get: { voiceAssistantActive }, set: { AppStore.shared.model.voiceAssistantActive = $0 }))
+            .frame(maxWidth: 400)
             .onReceive(AppStore.shared.publisher.map(\.voiceAssistantActive).removeDuplicates()) { voiceAssistantActive = $0 }
             .padding()
+            .frame(maxWidth: .infinity)
             .background {
                 Color.black.ignoresSafeArea(edges: .all)
             }
@@ -116,32 +118,7 @@ struct VoiceAssistantButton: View {
 //    }
 //}
 //
-//struct AssistantMuteView: View {
-//    var active: Bool
-//    var isOnlyItem: Bool
-//
-//    var body: some View {
-//        HStack {
-//            Image(systemName: "mic.circle.fill")
-//                .font(.system(size: 24))
-//
-//
-//            Group {
-//                if active {
-//                    if isOnlyItem {
-//                        Text("Say ") + Text(" “Hey, Chef”")
-//                    } else {
-//                        Text("Say ") + Text(" “Hey, Chef...”")
-//                    }
-//                } else {
-//                    Text("Voice Assistant")
-//                }
-//            }
-//            .font(.system(size: 18, weight: .semibold, design: .rounded))
-//        }
-//    }
-//}
-//
+
 
 private struct FooterButtonBackdrop: View {
     var highlightColor: Color?
@@ -200,19 +177,3 @@ private struct FooterButtonBackdrop: View {
 //    }
 //}
 //
-//extension InProgressTimer {
-//    static var stub: InProgressTimer {
-//        .init(id: "???", recipeId: "??", original: CookTimer(asText: "cook pasta for 10 minutes", seconds: 10 * 60), repeatedAlready: 0, started: Date.distantPast)
-//    }
-//
-//    static var stub2: InProgressTimer {
-//        .init(id: "???2", recipeId: "??2", original: CookTimer(asText: "cook pasta for 15 minutes", seconds: 10 * 60), repeatedAlready: 0, started: Date.distantPast)
-//    }
-//}
-//
-//#Preview {
-//    VStack(spacing: 0) {
-//        Color.blue
-//        Footer()
-//    }
-//}
