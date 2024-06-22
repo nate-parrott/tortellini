@@ -74,10 +74,6 @@ class VoiceAssistant: ObservableObject {
                 print("[VoiceAssistant] listening: \(listening)")
 
                 if listening {
-//                    try! AVAudioSession.sharedInstance().setCategory(.playAndRecord, mode: .default)
-//                    try! AVAudioSession.sharedInstance().setAllowHapticsAndSystemSoundsDuringRecording(true)
-//                    try! AVAudioSession.sharedInstance().setActive(true, options: [])
-
                     listeningTask = Task {
                         await listenLoop()
                     }
@@ -128,6 +124,9 @@ class VoiceAssistant: ObservableObject {
     }
 
     private var speechGenerator: any SpeechGenerator {
+        if let key = UserDefaults.standard.string(forKey: DefaultsKeys.openAIApiKey.rawValue)?.nilIfEmpty {
+            return OpenAISpeechGenerator(credentials: OpenAICredentials(apiKey: key), options: .init(voice: .fable, speed: 1.2))
+        }
         if let key = UserDefaults.standard.string(forKey: DefaultsKeys.elevenLabsAPIKey.rawValue)?.nilIfEmpty {
             return ElevenLabsSpeechGenerator(apiKey: key)
         }
@@ -142,7 +141,7 @@ class VoiceAssistant: ObservableObject {
         if Task.isCancelled { return }
 
         debugStatus = "Listening"
-        try? AVAudioSession.sharedInstance().setCategory(.record, mode: .default, options: [.mixWithOthers])
+        try? AVAudioSession.sharedInstance().setCategory(.playAndRecord, mode: .default, options: [])
         try! AVAudioSession.sharedInstance().setAllowHapticsAndSystemSoundsDuringRecording(true)
         try? AVAudioSession.sharedInstance().setActive(true)
 
@@ -212,21 +211,14 @@ class VoiceAssistant: ObservableObject {
 
                             let gen = self.speechGenerator
                             await gen.setManagesAudioSession(false)
-                            if let eleven = gen as? ElevenLabsSpeechGenerator {
-                                await eleven.setOnReadyToSpeak {
-                                    SystemSound.padFluteUp.stop()
-                                }
+                            await gen.setOnReadyToSpeak {
+                                SystemSound.padFluteUp.stop()
                             }
                             await gen.speak(response)
                             await gen.awaitFinishedSpeaking()
                             self.lastSpokenResponseDate = Date()
                             // TODO: Handle tools
                             break singleAnswerLoop
-//                            else {
-//                                debugStatus = "LLM responded but text changed"
-//                                responding = false
-//                                recognizedSpeech = true
-//                            }
                         } catch {
                             debugStatus = "Response error: \(error)"
                             rec.cancel()
@@ -262,7 +254,8 @@ class VoiceAssistant: ObservableObject {
     }
 
     private func getLLM() throws -> any ChatLLM {
-        try ChatGPT(credentials: .getSharedOpenRouterCredsOrThrow(), options: .init(model: .custom("meta-llama/llama-3-70b-instruct:nitro", 8192), maxTokens: nil, baseURL: .openRouterOpenAIChatEndpoint))
+        try ChatGPT(credentials: .getSharedOpenAICredsOrThrow(), options: .init(model: .gpt4_omni))
+//        try ChatGPT(credentials: .getSharedOpenRouterCredsOrThrow(), options: .init(model: .custom("meta-llama/llama-3-70b-instruct:nitro", 8192), maxTokens: nil, baseURL: .openRouterOpenAIChatEndpoint))
     }
 }
 

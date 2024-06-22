@@ -28,6 +28,13 @@ extension OpenAICredentials {
         return nil
     }
 
+    static var sharedOpenAI: OpenAICredentials? {
+        if let key = UserDefaults.standard.string(forKey: DefaultsKeys.openAIApiKey.rawValue)?.nilIfEmpty {
+            return .init(apiKey: key)
+        }
+        return nil
+    }
+
     static func getSharedOpenRouterCredsOrThrow() throws -> OpenAICredentials {
         enum Errors: Error {
             case noOpenRouterAPIKey
@@ -36,5 +43,15 @@ extension OpenAICredentials {
             throw Errors.noOpenRouterAPIKey
         }
         return sharedOpenRouter
+    }
+
+    static func getSharedOpenAICredsOrThrow() throws -> OpenAICredentials {
+        enum Errors: Error {
+            case noOpenAIAPIKey
+        }
+        guard let sharedOpenAI else {
+            throw Errors.noOpenAIAPIKey
+        }
+        return sharedOpenAI
     }
 }

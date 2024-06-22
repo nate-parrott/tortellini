@@ -35,6 +35,7 @@ struct TimerPIP: View {
         .onReceive(
             Timer.publish(every: 1, on: RunLoop.main, in: .common).autoconnect(),
             perform: { self.tick = $0 })
+        .geometryGroup()
     }
 
     var mainFont: Font {

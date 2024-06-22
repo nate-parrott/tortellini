@@ -16,6 +16,11 @@ struct RecipesList: View {
                 }
         }
         .overlay {
+            if recipes.count == 0 {
+                EmptyState()
+            }
+        }
+        .overlay {
             TimerOverlay()
         }
         .onReceive(AppStore.shared.publisher.map(\.recipes)) { self.recipes = $0 }
@@ -39,6 +44,25 @@ struct RecipesList: View {
         }) { recipeOpt in
             selectedRecipeId = recipeOpt?.id
         }
+    }
+}
+
+private struct EmptyState: View {
+    var body: some View {
+        let plus = Image(systemName: "plus.circle.fill")
+        let profile = Image(systemName: "person.crop.circle")
+        let paste = Image(systemName: "doc.on.clipboard")
+
+        VStack(spacing: 20) {
+            Text("First, tap \(profile) to add your OpenAI key.")
+            Text("Then, tap \(plus) to find a recipe online, or \(paste) to paste a recipe link.")
+        }
+        .lineLimit(nil)
+        .fixedSize(horizontal: false, vertical: true)
+        .foregroundStyle(.secondary)
+        .font(.appBody)
+        .multilineTextAlignment(.center)
+        .padding(40)
     }
 }
 

@@ -89,6 +89,7 @@ class SpeechRecognizer {
                 "Hey Chef",
                 "Hey Tommy",
                 "Hey Tortellini",
+                "Hi Tortellini",
             ]
             //            request.taskHint = .search
             // TODO: Add contextual strings using text from the current page

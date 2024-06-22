@@ -18,15 +18,15 @@ struct SettingsView: View {
 //            Section(header: Text("Anthropic API Key")) {
 //                TextField("API Key", text: $anthropicKey)
 //            }
-//            Section(header: Text("OpenAI API Key")) {
-//                TextField("API Key", text: $openAIKey)
+            Section(header: Text("OpenAI API Key")) {
+                TextField("API Key", text: $openAIKey)
+            }
+//            Section(header: Text("OpenRouter API Key")) {
+//                TextField("API Key", text: $openRouterKey)
 //            }
-            Section(header: Text("OpenRouter API Key")) {
-                TextField("API Key", text: $openRouterKey)
-            }
-            Section(header: Text("ElevenLabs API Key")) {
-                TextField("API Key", text: $elevenLabsAPIKey)
-            }
+//            Section(header: Text("ElevenLabs API Key")) {
+//                TextField("API Key", text: $elevenLabsAPIKey)
+//            }
         }
         .navigationTitle("Settings")
     }

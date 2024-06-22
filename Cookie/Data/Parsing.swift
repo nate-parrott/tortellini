@@ -120,7 +120,7 @@ extension ParsedRecipe {
         Always fill in the hours and minutes. If the timer is a range, like 5-6 minutes, give the low end.
         Use repeat={2} when the recipe says to cook something N minutes per side.
 
-        Steps tags look like this: <step index={N}> // one-indexed
+        Steps tags look like this: <step index="N"> // one-indexed
 
         Here are some examples:
 
@@ -133,13 +133,13 @@ extension ParsedRecipe {
 
         Your output:
         ```
-        <step index={1}>
-        <ingredient emoji="🧂">Salt</ingredient> and boil <ingredient emoji="💧">2 cups water</ingredient> on high heat, then add <ingredient emoji="🍝" details="10oz">pasta</ingredient> and <timer hours={0} minutes={10} repeat={1}>boil for 10 minutes</timer>.
+        <step index="1">
+        <ingredient emoji="🧂">Salt</ingredient> and boil <ingredient emoji="💧">2 cups water</ingredient> on high heat, then add <ingredient emoji="🍝" details="10oz">pasta</ingredient> and <timer hours="0" minutes="10" repeat="1">boil for 10 minutes</timer>.
         </step>
-        <step index={2}>
+        <step index="2">
         Stir in <ingredient emoji="🧈" details="2oz">butter</ingredient> and <ingredient emoji="🌱" details="1, finely chopped">half the scallions.</ingredient>.
         </step>
-        <step index={3}>
+        <step index="3">
         Garnish with the <ingredient emoji="🌱" details="1, finely chopped">remaining scallions</ingredient> and serve.
         </step>
         ```
