@@ -42,9 +42,6 @@ struct RecipesWindow: View {
                         }
                     }
                 }
-//                .navigationDestination(for: AppRoute.self) { route in
-//                    ViewForRoute(route: route)
-//                }
         }
         .sheet(item: $adding, content: { adding in
             RecipeAdder(addRequest: adding)

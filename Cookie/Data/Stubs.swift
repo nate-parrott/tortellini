@@ -46,9 +46,11 @@ extension Recipe {
                         .plain("Single along with me: 'i love the pasta, i love the sauce, and afterward i love to floss'."),
                       ]),
             ],
-            ingredients: [
-                .init(emoji: "🍝", text: "8oz pasta"),
-                .init(emoji: "🧈", text: "2oz butter"),
-                .init(emoji: "🌱", text: "2 scallions, finely chopped")
+            ingredientGroups: [
+                ParsedRecipe.IngredientGroup(name: "Group 1", ingredients: [
+                    .init(emoji: "🍝", text: "8oz pasta"),
+                    .init(emoji: "🧈", text: "2oz butter"),
+                    .init(emoji: "🌱", text: "2 scallions, finely chopped")
+                ])
             ]))
 }

@@ -26,12 +26,17 @@ extension Recipe {
         interface Recipe {
             recipePresent: Bool // Does a recipe exist in the webpage? true or false
             title: string // Remove SEO cruft from original title if present
-            ingredients: Ingredient[]
+            ingredientGroups: IngredientGroup[] // One group, unless the recipe breaks out ingredients into different groups (e.g. one for cake and one for frosting)
             steps: Step[]
             summary: string // Write a quick 10-word summary of the cooking process, like "Cook pasta, roast chicken and serve with sauce."
             yield: string? // e.g. "4 servings" or "1 loaf". Only include if mentioned in recipe data.
             prepTime: string? // e.g. "10 minutes" or "1 hour". Only include if mentioned in recipe data. Write in plain english.
             cookTime: string? // e.g. "30 minutes" or "2 hours" Only include if mentioned in recipe data. Write in plain english.
+        }
+
+        interface IngredientGroup {
+            name: string // If a recipe doesn't have groups, use the recipe name
+            ingredients: Ingredient[]
         }
 
         interface Ingredient {
@@ -61,7 +66,7 @@ extension Recipe {
         struct Output: Codable {
             var recipePresent: Bool
             var title: String?
-            var ingredients: [Ingredient]?
+            var ingredientGroups: [ParsedRecipe.IngredientGroup]?
             var steps: [Step]?
             var summary: String?
             var yield: String?
@@ -76,7 +81,7 @@ extension Recipe {
                 title: output.title ?? title,
                 description: output.summary,
                 steps: output.steps ?? [],
-                ingredients: output.ingredients ?? [],
+                ingredientGroups: output.ingredientGroups ?? [],
                 yield: output.yield,
                 cookTime: output.cookTime,
                 prepTime: output.prepTime
@@ -116,9 +121,9 @@ extension ParsedRecipe {
 
         Ingredients tags look like this: <ingredient emoji="🧈" details="10 oz">butter or ghee</ingredient>. Choose a related FOOD or DRINK emoji.
 
-        Timer tags look like this: <timer hours={0} minutes={6} repeat={1} name>cook 6 minutes each side until crispy</timer>.
+        Timer tags look like this: <timer hours="0" minutes="6" repeat="1" name="Cook Chicken">cook 6 minutes each side until crispy</timer>.
         Always fill in the hours and minutes. If the timer is a range, like 5-6 minutes, give the low end.
-        Use repeat={2} when the recipe says to cook something N minutes per side.
+        Use repeat="2" when the recipe says to cook something N minutes per side.
 
         Steps tags look like this: <step index="N"> // one-indexed
 
@@ -225,12 +230,25 @@ extension ParsedRecipe {
         return """
         Title: \(title)
         Ingredients:
-        \(ingredients.map{ "- " + $0.emoji + " " + $0.text }.joined(separator: "\n"))
+        \(ingredientGroups.map(\.forLLM).joined(separator: "\n"))
         Steps:
         \(steps.enumerated().map({ (i, step) in
         return "\(i + 1). \(step.text)"
         }).joined(separator: "\n"))
         """
+    }
+}
+
+extension ParsedRecipe.IngredientGroup {
+    var forLLM: String {
+        var lines = [String]()
+        if let name {
+            lines.append("\(name):")
+        }
+        for ingredient in self.ingredients {
+            lines.append("- \(ingredient.emoji) \(ingredient.text)")
+        }
+        return lines.joined(separator: "\n")
     }
 }
 
@@ -247,12 +265,14 @@ private extension Step.FormattedText {
             return .ingredient(Ingredient(emoji: emoji, text: text, missingInfo: missingInfo))
 
         case "timer":
+            let wrappedText = element.stringValue.trimmingCharacters(in: .newlines)
             let hours = element.attr("hours")?.parsedAsInt ?? 0
             let minutes = element.attr("minutes")?.parsedAsInt ?? 0
             let seconds = hours * 3600 + minutes * 60
+            let name = element.attr("name") ?? wrappedText
             let repeats = element.attr("repeat")?.parsedAsInt
             return .timer(CookTimer(
-                asText: element.stringValue.trimmingCharacters(in: .newlines),
+                asText: name,
                 seconds: seconds,
                 repeats: repeats)
             )

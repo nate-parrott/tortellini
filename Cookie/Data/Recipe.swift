@@ -20,10 +20,15 @@ struct ParsedRecipe: Equatable, Codable {
     var title: String
     var description: String?
     var steps: [Step]
-    var ingredients: [Ingredient]
+    var ingredientGroups: [IngredientGroup]
     var yield: String?
     var cookTime: String?
     var prepTime: String?
+
+    struct IngredientGroup: Equatable, Codable {
+        var name: String?
+        var ingredients: [Ingredient]
+    }
 }
 
 struct Ingredient: Equatable, Codable {

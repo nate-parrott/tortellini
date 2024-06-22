@@ -27,8 +27,8 @@ struct RecipeView: View {
 
                     case .step(let idx, let step):
                         StepView(idx: idx, step: step, generating: recipe.generating ?? false, recipeId: recipe.id)
-                            .frame(maxWidth: 650)
-                            .frame(maxWidth: .infinity)
+                            .frame(maxWidth: 650, alignment: .leading)
+                            .frame(maxWidth: .infinity, alignment: .leading)
                     }
                 }
                 .font(.appBody)
@@ -188,8 +188,8 @@ struct RecipeHeader: View {
                 }
                 .padding(.horizontal, 6)
 
-                if parsed.ingredients.count > 0 {
-                    IngredientsUnit(ingredients: parsed.ingredients)
+                if parsed.ingredientGroups.count > 0 {
+                    IngredientsUnit(groups: parsed.ingredientGroups)
                         .frame(maxWidth: 650)
                         .padding(.top, 12)
                 }
@@ -202,15 +202,21 @@ struct RecipeHeader: View {
 }
 
 struct IngredientsUnit: View {
-    var ingredients: [Ingredient]
+    var groups: [ParsedRecipe.IngredientGroup]
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            ForEachUnidentifiable(items: ingredients) { ing in
-                Label(
-                    title: { Text(ing.text.cleanedUp) },
-                    icon: { EmojiView(emoji: ing.emoji) }
-                )
+            ForEachUnidentifiable(items: groups) { group in
+                if let name = group.name, groups.count > 1 {
+                    Text(name)
+                        .foregroundStyle(.secondary)
+                }
+                ForEachUnidentifiable(items: group.ingredients) { ing in
+                    Label(
+                        title: { Text(ing.text.cleanedUp) },
+                        icon: { EmojiView(emoji: ing.emoji) }
+                    )
+                }
             }
         }
         .lineLimit(nil)
