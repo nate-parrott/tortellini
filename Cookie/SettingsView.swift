@@ -5,6 +5,27 @@ enum DefaultsKeys: String {
     case openAIApiKey
     case openRouterAPIKey
     case elevenLabsAPIKey
+    case hasRequestedNotifPermission
+}
+
+extension DefaultsKeys {
+    var boolValue: Bool {
+        get {
+            UserDefaults.standard.bool(forKey: self.rawValue)
+        }
+        nonmutating set {
+            UserDefaults.standard.set(newValue, forKey: self.rawValue)
+        }
+    }
+
+    var stringValue: String {
+        get {
+            UserDefaults.standard.string(forKey: self.rawValue) ?? ""
+        }
+        nonmutating set {
+            UserDefaults.standard.set(newValue, forKey: self.rawValue)
+        }
+    }
 }
 
 struct SettingsView: View {

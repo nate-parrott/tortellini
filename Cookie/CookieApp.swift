@@ -76,19 +76,6 @@ struct RecipesWindow: View {
         }
     }
 
-//    private func addViaURL() {
-//        Task {
-//            guard let text = await UIApplication.shared.prompt(title: "Add Recipe", message: "Paste a link:", placeholder: "https://meatballs.com/gravy"),
-//                  let url = URL(string: text)
-//            else {
-//                return
-//            }
-//            DispatchQueue.main.async {
-//                self.adding = .init(url: url)
-//            }
-//        }
-//    }
-
     private func handle(url: URL) {
         guard let parts = URLComponents(url: url, resolvingAgainstBaseURL: true) else {
             return
